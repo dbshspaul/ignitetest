@@ -11,7 +11,7 @@ public class ProducerUtil {
     private ProducerUtil() {
     }
 
-    public static ProducerUtil getInstance() {
+    private static ProducerUtil getInstance() {
         return new ProducerUtil();
     }
 
@@ -26,8 +26,13 @@ public class ProducerUtil {
 
     public static void sendMessage(String topicName, String message) {
         Producer producer = getInstance().getProducer();
-        ProducerRecord<String, String> rec = new ProducerRecord<String, String>(topicName, message);
-        producer.send(rec);
-        producer.close();
+        try {
+            ProducerRecord<String, String> rec = new ProducerRecord<String, String>(topicName, message);
+            producer.send(rec);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            producer.close();
+        }
     }
 }

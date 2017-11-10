@@ -50,7 +50,9 @@ public class CassandraConnector implements AutoCloseable {
      */
     @Override
     public void close() {
-        cluster.close();
+        if (cluster!=null) {
+            cluster.close();
+        }
     }
 
 }
