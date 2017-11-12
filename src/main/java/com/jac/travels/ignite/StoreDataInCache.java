@@ -2,6 +2,7 @@ package com.jac.travels.ignite;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Statement;
 import com.jac.travels.cassendra.CassandraConnector;
 import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.Employee;
@@ -51,9 +52,15 @@ public class StoreDataInCache extends CacheStoreAdapter<Long, Employee> {
         try (CassandraConnector client = new CassandraConnector()) {
             client.connect(ipAddress, port);
             System.out.println("connection success with cassandra");
+            ResultSet resultSet = client.getSession().execute("SELECT 1 FROM hr.emp WHERE id=" + employee.getId());
+            if(resultSet.one()!=null){
+                client.getSession().execute("insert into hr.emp(id, name, mobile) values(" + employee.getId() + ",'" + employee.getName() + "','" + employee.getMobile() + "')");
+                System.out.println("One row inserted successfully.");
+            }else {
+                client.getSession().execute("update hr.emp set name='" + employee.getName() + "', mobile='" + employee.getName() + "' where id=" + employee.getId());
+                System.out.println("Data updated successfully.");
+            }
             ProducerUtil.sendMessage("kafkaCacheTopic",employee.toString());
-            client.getSession().execute("insert into hr.emp(id, name, mobile) values(" + employee.getId() + ",'" + employee.getName() + "','" + employee.getMobile() + "');");
-            System.out.println("One row inserted successfully.");
         }catch (Exception e){
             ProducerUtil.sendMessage("kafkaErrorTopic",employee.toString());
             e.printStackTrace();
