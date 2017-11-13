@@ -11,7 +11,7 @@ public class CassandraDataUtility {
             final String ipAddress = "localhost";
             final int port = 9042;
             System.out.println("Connecting to IP Address " + ipAddress + ":" + port + "...");
-            client.connect(ipAddress, port);
+            client.connect();
             System.out.println("success");
             ResultSet resultSet = client.getSession().execute(query);
             return resultSet.all();

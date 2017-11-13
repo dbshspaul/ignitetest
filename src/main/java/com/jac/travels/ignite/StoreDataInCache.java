@@ -2,14 +2,13 @@ package com.jac.travels.ignite;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Statement;
 import com.jac.travels.cassendra.CassandraConnector;
 import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.Employee;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
-import org.apache.ignite.cache.store.CacheStoreSession;
 import org.apache.ignite.lang.IgniteBiInClosure;
-import org.apache.ignite.resources.CacheStoreSessionResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
@@ -17,20 +16,14 @@ import javax.cache.integration.CacheWriterException;
 import java.util.List;
 
 public class StoreDataInCache extends CacheStoreAdapter<Long, Employee> {
-    /**
-     * Store session.
-     */
-    @CacheStoreSessionResource
-    private CacheStoreSession ses;
-    final String ipAddress = "localhost";
-    final int port = 9042;
+
+    Logger logger = LoggerFactory.getLogger(StoreDataInCache.class);
 
     @Override
     public Employee load(Long aLong) throws CacheLoaderException {
-        System.out.println(">>> Store load [key=" + aLong + ']');
+        logger.info(">>> Store load [key=" + aLong + ']');
         try (CassandraConnector client = new CassandraConnector()) {
-            client.connect(ipAddress, port);
-            System.out.println("success");
+            client.connect();
             ResultSet resultSet = client.getSession().execute("SELECT id, name, mobile FROM hr.emp WHERE id=" + aLong);
             List<Row> rows = resultSet.all();
             if (rows.size() > 0) {
@@ -47,22 +40,22 @@ public class StoreDataInCache extends CacheStoreAdapter<Long, Employee> {
         Long key = entry.getKey();
         Employee employee = entry.getValue();
 
-        System.out.println(">>> Store write [key=" + key + ", val=" + employee + ']');
+        logger.info(">>> Store write [key=" + key + ", val=" + employee + ']');
 
         try (CassandraConnector client = new CassandraConnector()) {
-            client.connect(ipAddress, port);
-            System.out.println("connection success with cassandra");
-            ResultSet resultSet = client.getSession().execute("SELECT 1 FROM hr.emp WHERE id=" + employee.getId());
-            if(resultSet.one()!=null){
+            client.connect();
+            logger.info("connection success with cassandra");
+            ResultSet resultSet = client.getSession().execute("SELECT * FROM hr.emp WHERE id=" + employee.getId());
+            if (resultSet.one() != null) {
                 client.getSession().execute("insert into hr.emp(id, name, mobile) values(" + employee.getId() + ",'" + employee.getName() + "','" + employee.getMobile() + "')");
-                System.out.println("One row inserted successfully.");
-            }else {
+                logger.info("One row inserted successfully.");
+            } else {
                 client.getSession().execute("update hr.emp set name='" + employee.getName() + "', mobile='" + employee.getName() + "' where id=" + employee.getId());
-                System.out.println("Data updated successfully.");
+                logger.info("Data updated successfully.");
             }
-            ProducerUtil.sendMessage("kafkaCacheTopic",employee.toString());
-        }catch (Exception e){
-            ProducerUtil.sendMessage("kafkaErrorTopic",employee.toString());
+            ProducerUtil.sendMessage("kafkaCacheTopic", employee.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", employee.toString());
             e.printStackTrace();
         }
     }
@@ -74,21 +67,23 @@ public class StoreDataInCache extends CacheStoreAdapter<Long, Employee> {
 
     @Override
     public void loadCache(IgniteBiInClosure<Long, Employee> clo, Object... args) {
-        System.out.println(">>> loading cache");
+        logger.info(">>> loading cache");
         try (CassandraConnector client = new CassandraConnector()) {
-            client.connect(ipAddress, port);
-            System.out.println("success");
+            client.connect();
+            logger.info("success");
             ResultSet resultSet = client.getSession().execute("SELECT id, name, mobile FROM hr.emp");
             List<Row> all = resultSet.all();
             all.stream().forEach(row -> {
                 try {
-                    clo.apply(row.getLong("id"), new Employee(row.getLong("id"), row.getString("name"), row.getString("mobile")));
+                    Employee employee = new Employee(row.getLong("id"), row.getString("name"), row.getString("mobile"));
+                    clo.apply(row.getLong("id"), employee);
+                    ProducerUtil.sendMessage("kafkaCacheTopic", employee.toString());
                 } catch (Exception e) {
-                    ProducerUtil.sendMessage("kafkaErrorTopic",row.toString());
+                    ProducerUtil.sendMessage("kafkaErrorTopic", row.toString());
                     e.printStackTrace();
                 }
             });
-            System.out.println(">>>Cache Loaded ");
+            logger.info("<<<Cache Successfully Loaded ");
         }
     }
 }
