@@ -37,44 +37,6 @@ public class Room {
    private int youth_max_age;
    private int youth_min_age;
 
-    public Room(int contract_id, int room_id, int adult_max, int adult_min, int adult_with_child_max, boolean allow_child_close_out, boolean allow_child_youth_close_out, boolean auto_upgrade_child_to_adult, boolean child_occ_only_allowed, int children_max, int children_max_age, int children_min, int children_min_age, int cots_max, boolean exclude_adult_child_combinations, boolean extra_beds_used, boolean extra_rate_allocation, boolean has_durations_defined, boolean has_inventory_defined, boolean has_occ_allocation_defined, boolean has_split_inventory_defined, int infant_max_age, boolean infants_count_toward_occupancy, int max_adults_extra_bed, int max_children_extra_bed, int max_occupancy_before_extra_bed, int occupancy_max, int occupancy_min, int occupancy_standard, String room_type_code, String room_type_name, int senior_min_age, boolean youth_count_as_adults, int youth_max_age, int youth_min_age) {
-        this.contract_id = contract_id;
-        this.room_id = room_id;
-        this.adult_max = adult_max;
-        this.adult_min = adult_min;
-        this.adult_with_child_max = adult_with_child_max;
-        this.allow_child_close_out = allow_child_close_out;
-        this.allow_child_youth_close_out = allow_child_youth_close_out;
-        this.auto_upgrade_child_to_adult = auto_upgrade_child_to_adult;
-        this.child_occ_only_allowed = child_occ_only_allowed;
-        this.children_max = children_max;
-        this.children_max_age = children_max_age;
-        this.children_min = children_min;
-        this.children_min_age = children_min_age;
-        this.cots_max = cots_max;
-        this.exclude_adult_child_combinations = exclude_adult_child_combinations;
-        this.extra_beds_used = extra_beds_used;
-        this.extra_rate_allocation = extra_rate_allocation;
-        this.has_durations_defined = has_durations_defined;
-        this.has_inventory_defined = has_inventory_defined;
-        this.has_occ_allocation_defined = has_occ_allocation_defined;
-        this.has_split_inventory_defined = has_split_inventory_defined;
-        this.infant_max_age = infant_max_age;
-        this.infants_count_toward_occupancy = infants_count_toward_occupancy;
-        this.max_adults_extra_bed = max_adults_extra_bed;
-        this.max_children_extra_bed = max_children_extra_bed;
-        this.max_occupancy_before_extra_bed = max_occupancy_before_extra_bed;
-        this.occupancy_max = occupancy_max;
-        this.occupancy_min = occupancy_min;
-        this.occupancy_standard = occupancy_standard;
-        this.room_type_code = room_type_code;
-        this.room_type_name = room_type_name;
-        this.senior_min_age = senior_min_age;
-        this.youth_count_as_adults = youth_count_as_adults;
-        this.youth_max_age = youth_max_age;
-        this.youth_min_age = youth_min_age;
-    }
-
     public int getContract_id() {
         return contract_id;
     }
