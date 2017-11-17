@@ -1,51 +1,55 @@
 package com.jac.travels.model;
 
-import java.util.Date;
+import com.datastax.driver.core.LocalDate;
+import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.Table;
 
+@Table("contract")
 public class Contract {
-    private int property_id;
-    private int contract_id;
-    private Date booking_from;
-    private Date booking_to;
+    private Integer property_id;
+    @PrimaryKey
+    private Integer contract_id;
+    private LocalDate booking_from;
+    private LocalDate booking_to;
     private String buying_currency;
-    private int channel_manager_id;
-    private int channel_type_id;
-    private int contract_status_id;
-    private int contract_type_id;
-    private int follow_on_contract_id;
-    private boolean no_end_dates;
-    private Date stay_from;
-    private Date stay_to;
+    private Integer channel_manager_id;
+    private Integer channel_type_id;
+    private Integer contract_status_id;
+    private Integer contract_type_id;
+    private Integer follow_on_contract_id;
+    private Boolean no_end_dates;
+    private LocalDate stay_from;
+    private LocalDate stay_to;
 
-    public int getProperty_id() {
+    public Integer getProperty_id() {
         return property_id;
     }
 
-    public void setProperty_id(int property_id) {
+    public void setProperty_id(Integer property_id) {
         this.property_id = property_id;
     }
 
-    public int getContract_id() {
+    public Integer getContract_id() {
         return contract_id;
     }
 
-    public void setContract_id(int contract_id) {
+    public void setContract_id(Integer contract_id) {
         this.contract_id = contract_id;
     }
 
-    public Date getBooking_from() {
+    public LocalDate getBooking_from() {
         return booking_from;
     }
 
-    public void setBooking_from(Date booking_from) {
+    public void setBooking_from(LocalDate booking_from) {
         this.booking_from = booking_from;
     }
 
-    public Date getBooking_to() {
+    public LocalDate getBooking_to() {
         return booking_to;
     }
 
-    public void setBooking_to(Date booking_to) {
+    public void setBooking_to(LocalDate booking_to) {
         this.booking_to = booking_to;
     }
 
@@ -57,67 +61,67 @@ public class Contract {
         this.buying_currency = buying_currency;
     }
 
-    public int getChannel_manager_id() {
+    public Integer getChannel_manager_id() {
         return channel_manager_id;
     }
 
-    public void setChannel_manager_id(int channel_manager_id) {
+    public void setChannel_manager_id(Integer channel_manager_id) {
         this.channel_manager_id = channel_manager_id;
     }
 
-    public int getChannel_type_id() {
+    public Integer getChannel_type_id() {
         return channel_type_id;
     }
 
-    public void setChannel_type_id(int channel_type_id) {
+    public void setChannel_type_id(Integer channel_type_id) {
         this.channel_type_id = channel_type_id;
     }
 
-    public int getContract_status_id() {
+    public Integer getContract_status_id() {
         return contract_status_id;
     }
 
-    public void setContract_status_id(int contract_status_id) {
+    public void setContract_status_id(Integer contract_status_id) {
         this.contract_status_id = contract_status_id;
     }
 
-    public int getContract_type_id() {
+    public Integer getContract_type_id() {
         return contract_type_id;
     }
 
-    public void setContract_type_id(int contract_type_id) {
+    public void setContract_type_id(Integer contract_type_id) {
         this.contract_type_id = contract_type_id;
     }
 
-    public int getFollow_on_contract_id() {
+    public Integer getFollow_on_contract_id() {
         return follow_on_contract_id;
     }
 
-    public void setFollow_on_contract_id(int follow_on_contract_id) {
+    public void setFollow_on_contract_id(Integer follow_on_contract_id) {
         this.follow_on_contract_id = follow_on_contract_id;
     }
 
-    public boolean isNo_end_dates() {
+    public Boolean getNo_end_dates() {
         return no_end_dates;
     }
 
-    public void setNo_end_dates(boolean no_end_dates) {
+    public void setNo_end_dates(Boolean no_end_dates) {
         this.no_end_dates = no_end_dates;
     }
 
-    public Date getStay_from() {
+    public LocalDate getStay_from() {
         return stay_from;
     }
 
-    public void setStay_from(Date stay_from) {
+    public void setStay_from(LocalDate stay_from) {
         this.stay_from = stay_from;
     }
 
-    public Date getStay_to() {
+    public LocalDate getStay_to() {
         return stay_to;
     }
 
-    public void setStay_to(Date stay_to) {
+    public void setStay_to(LocalDate stay_to) {
         this.stay_to = stay_to;
     }
 

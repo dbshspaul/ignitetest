@@ -13,8 +13,6 @@ import java.util.UUID;
 
 public class IgniteDemo {
 
-    private static final Long id = Math.abs(UUID.randomUUID().getLeastSignificantBits());
-
 
     public static void main(String[] args) {
         Ignite ignite = Ignition.start();
