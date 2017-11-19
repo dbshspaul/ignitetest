@@ -58,7 +58,8 @@ public class Controller {
     @PutMapping(name = "/rate/room", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseEntity updateRateByRoom(@RequestParam(name = "room-id") int roomId, @RequestParam(name = "rate", required = false) Rate rate) {
-        RatePlan ratePlan=ratePlanService.getRatePlaneByRoomId(roomId);
-        return new ResponseEntity(ratePlan, HttpStatus.CREATED);
+        List<RatePlan> ratePlans=ratePlanService.getRatePlaneByRoomId(roomId);
+        //todo update rate
+        return new ResponseEntity(ratePlans, HttpStatus.CREATED);
     }
 }

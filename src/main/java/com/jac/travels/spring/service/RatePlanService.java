@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface RatePlanService {
     List<RatePlan> getAll();
-    RatePlan getRatePlaneByRoomId(int roomId);
+    List<RatePlan> getRatePlaneByRoomId(int roomId);
 }

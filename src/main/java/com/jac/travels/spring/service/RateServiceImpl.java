@@ -1,8 +1,11 @@
 package com.jac.travels.spring.service;
 
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Select;
 import com.jac.travels.model.Rate;
 import com.jac.travels.spring.repositories.RateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,8 +13,7 @@ import java.util.List;
 @Service
 public class RateServiceImpl implements RateService {
     @Autowired
-    RateRepository rateRepository;
-
+    private RateRepository rateRepository;
     @Override
     public List<Rate> getAll() {
         return (List<Rate>) rateRepository.findAll();
