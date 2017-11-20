@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface RateService {
     List<Rate> getAll();
+
+    void updateRateByRatePlanId(Rate rate, Integer ratePlanId);
 }

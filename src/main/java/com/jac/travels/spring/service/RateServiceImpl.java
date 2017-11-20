@@ -14,8 +14,15 @@ import java.util.List;
 public class RateServiceImpl implements RateService {
     @Autowired
     private RateRepository rateRepository;
+    com.jac.travels.utility.QueryBuilder builder = new com.jac.travels.utility.QueryBuilder();
     @Override
     public List<Rate> getAll() {
         return (List<Rate>) rateRepository.findAll();
+    }
+
+    @Override
+    public void updateRateByRatePlanId(Rate rate, Integer ratePlanId) {
+        rateRepository.save(rate);
+        builder.updateData(rate,"stay_date","rate_plan_id",String.valueOf(ratePlanId));
     }
 }

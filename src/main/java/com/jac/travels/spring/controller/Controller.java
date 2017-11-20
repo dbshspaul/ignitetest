@@ -15,7 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -59,7 +61,20 @@ public class Controller {
     @ResponseBody
     public ResponseEntity updateRateByRoom(@RequestParam(name = "room-id") int roomId, @RequestParam(name = "rate", required = false) Rate rate) {
         List<RatePlan> ratePlans=ratePlanService.getRatePlaneByRoomId(roomId);
-        //todo update rate
-        return new ResponseEntity(ratePlans, HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        try {
+            int i = 0;
+            for (RatePlan ratePlan : ratePlans) {
+                rateService.updateRateByRatePlanId(rate,ratePlan.getRate_plan_id());
+                i++;
+            }
+            response.put("msg", i+" Data updated successfully.");
+            return new ResponseEntity(response, HttpStatus.OK);
+        } catch (Exception e) {
+            response.put("msg", "Data update failed.");
+            response.put("cause", e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }

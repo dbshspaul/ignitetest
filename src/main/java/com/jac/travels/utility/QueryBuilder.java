@@ -1,5 +1,6 @@
 package com.jac.travels.utility;
 
+import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.jac.travels.cassendra.CassandraConnector;
@@ -103,7 +104,7 @@ public class QueryBuilder {
                             .substring(0, 1).toUpperCase()));
             if (getDataById(o.getClass(), idFieldName, getterId.invoke(o)) == null) {
                 logger.info("Object not found, trying to insert data.");
-                updateData(o, idFieldName);
+                updateData(o, idFieldName,null,null);
                 return;
             }
         } catch (Exception e) {
@@ -155,7 +156,7 @@ public class QueryBuilder {
         return query;
     }
 
-    public <T> void updateData(T o, String idFieldName) {
+    public <T> void updateData(T o, String idFieldName, String updateByFieldName, String value) {
         try {
             Method getterId = o.getClass().getMethod("get" + idFieldName
                     .replaceFirst(idFieldName.substring(0, 1), idFieldName
@@ -170,7 +171,7 @@ public class QueryBuilder {
         }
 
         try (CassandraConnector client = new CassandraConnector()) {
-            String query = updateQuery(o, idFieldName);
+            String query = updateQuery(o, idFieldName,updateByFieldName,value);
             client.connect();
             logger.info("Connection to cassandra successful");
             logger.info("Query: " + query);
@@ -184,12 +185,12 @@ public class QueryBuilder {
         }
     }
 
-    private <T> String updateQuery(T o, String idFieldName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+    private <T> String updateQuery(T o, String idFieldName, String updateByFieldName, String value) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
         Class c = o.getClass();
         String query = "update " + keyspaceName + "." + c.getSimpleName() + " set ";
         for (Field field : c.getDeclaredFields()) {
             if (field.getName() != idFieldName) {
-                if (field.getType().equals(String.class)) {
+                if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
                     Method method = c.getMethod("get" + field.getName()
                             .replaceFirst(field.getName().substring(0, 1), field.getName()
                                     .substring(0, 1).toUpperCase()));
@@ -208,15 +209,27 @@ public class QueryBuilder {
             }
         }
         query = query.substring(0, query.lastIndexOf(","));
-        Field idField = c.getDeclaredField(idFieldName);
-        Method getterId = c.getMethod("get" + idFieldName
-                .replaceFirst(idFieldName.substring(0, 1), idFieldName
-                        .substring(0, 1).toUpperCase()));
-        if (idField.getType().equals(String.class)) {
-            query += " where " + idFieldName + "='" + getterId.invoke(o) + "'";
+
+
+        if (updateByFieldName != null && updateByFieldName.trim() != "") {
+            Field idField = c.getDeclaredField(idFieldName);
+            Method getterId = c.getMethod("get" + idFieldName
+                    .replaceFirst(idFieldName.substring(0, 1), idFieldName
+                            .substring(0, 1).toUpperCase()));
+            if (idField.getType().equals(String.class) || idField.getType().equals(LocalDate.class)) {
+                query += " where " + idFieldName + "='" + getterId.invoke(o) + "'";
+            } else {
+                query += " where " + idFieldName + "=" + getterId.invoke(o);
+            }
         } else {
-            query += " where " + idFieldName + "=" + getterId.invoke(o);
+            Field idField = c.getDeclaredField(updateByFieldName);
+            if (idField.getType().equals(String.class) || idField.getType().equals(LocalDate.class)) {
+                query += " where " + updateByFieldName + "='" + value + "'";
+            } else {
+                query += " where " + updateByFieldName + "=" + value;
+            }
         }
+
         return query;
     }
 
