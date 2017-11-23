@@ -1,6 +1,8 @@
 package com.jac.travels.ignite;
 
+import com.datastax.driver.core.LocalDate;
 import com.jac.travels.model.Contract;
+import com.jac.travels.model.Rate;
 import com.jac.travels.model.Room;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
@@ -13,9 +15,33 @@ import java.util.UUID;
 
 public class IgniteDemo {
 
+    private IgniteCache<Integer, Room> roomCache;
+    private IgniteCache<Integer, Contract> contractCache;
+    private IgniteCache<LocalDate, Rate> rateCache;
 
-    public static void main(String[] args) {
+    private IgniteDemo() {
+        startCache();
+    }
+
+    private static final IgniteDemo instance = new IgniteDemo();
+
+    public static IgniteDemo getInstance(){
+        return instance;
+    }
+
+
+    public void startCache() {
         Ignite ignite = Ignition.start();
+
+        CacheConfiguration rateCacheConfig = new CacheConfiguration();
+        rateCacheConfig.setName("myCache");
+        rateCacheConfig.setReadThrough(true);
+        rateCacheConfig.setWriteThrough(true);
+        rateCacheConfig.setWriteBehindEnabled(true);
+        rateCacheConfig.setCacheMode(CacheMode.PARTITIONED);
+        rateCacheConfig.setIndexedTypes(LocalDate.class, Rate.class);
+        rateCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(CacheStoreForRate.class));
+        rateCache = ignite.getOrCreateCache(rateCacheConfig);
 
         CacheConfiguration roomCacheConfig = new CacheConfiguration();
         roomCacheConfig.setName("myCache");
@@ -25,7 +51,7 @@ public class IgniteDemo {
         roomCacheConfig.setCacheMode(CacheMode.PARTITIONED);
         roomCacheConfig.setIndexedTypes(Integer.class, Room.class);
         roomCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(CacheStoreForRoom.class));
-        IgniteCache<Integer, Room> roomCache = ignite.getOrCreateCache(roomCacheConfig);
+        roomCache = ignite.getOrCreateCache(roomCacheConfig);
 
         CacheConfiguration contractCacheConfig = new CacheConfiguration();
         contractCacheConfig.setName("myCache");
@@ -35,11 +61,36 @@ public class IgniteDemo {
         contractCacheConfig.setCacheMode(CacheMode.PARTITIONED);
         contractCacheConfig.setIndexedTypes(Integer.class, Contract.class);
         contractCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(CacheStroreForContract.class));
-        IgniteCache<Integer, Contract> contractCache = ignite.getOrCreateCache(contractCacheConfig);
+        contractCache = ignite.getOrCreateCache(contractCacheConfig);
 
-        //roomCache.put(10, "hello India");
 
-        contractCache.loadCache(null);
+    }
 
+    public IgniteCache<Integer, Room> getRoomCache() {
+        return roomCache;
+    }
+
+    public void setRoomCache(IgniteCache<Integer, Room> roomCache) {
+        this.roomCache = roomCache;
+    }
+
+    public IgniteCache<Integer, Contract> getContractCache() {
+        return contractCache;
+    }
+
+    public void setContractCache(IgniteCache<Integer, Contract> contractCache) {
+        this.contractCache = contractCache;
+    }
+
+    public IgniteCache<LocalDate, Rate> getRateCache() {
+        return rateCache;
+    }
+
+    public void setRateCache(IgniteCache<LocalDate, Rate> rateCache) {
+        this.rateCache = rateCache;
+    }
+
+    public static void main(String[] args) {
+        IgniteDemo.getInstance();
     }
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
 import javax.cache.integration.CacheWriterException;
+import java.util.UUID;
 
 public class CacheStoreForRoom extends CacheStoreAdapter<Integer, Room> {
     Logger logger = LoggerFactory.getLogger(CacheStoreForRoom.class);
@@ -27,8 +28,14 @@ public class CacheStoreForRoom extends CacheStoreAdapter<Integer, Room> {
     public void write(Cache.Entry<? extends Integer, ? extends Room> entry) throws CacheWriterException {
         Integer key = entry.getKey();
         Room room = entry.getValue();
-        logger.info(">>> Store write [key=" + key + ", val=" + room + ']');
-        queryBuilder.insertData(room, "room_id");
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + room + ']');
+            queryBuilder.insertData(room, "room_id");
+            ProducerUtil.sendMessage("kafkaCacheTopic", room.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", room.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -6,9 +6,9 @@ import org.springframework.data.cassandra.mapping.Table;
 
 @Table("contract")
 public class Contract {
-    private Integer property_id;
     @PrimaryKey
     private Integer contract_id;
+    private Integer property_id;
     private LocalDate booking_from;
     private LocalDate booking_to;
     private String buying_currency;

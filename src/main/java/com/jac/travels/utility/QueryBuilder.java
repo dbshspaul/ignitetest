@@ -57,11 +57,12 @@ public class QueryBuilder {
         T o = null;
         try (CassandraConnector client = new CassandraConnector()) {
             Field idField = c.getDeclaredField(idFieldName);
-            if (idField.getType().equals(String.class)) {
+            if (idField.getType().equals(String.class) || idField.getType().equals(LocalDate.class)) {
                 query += " where " + idFieldName + "='" + idValue + "'";
             } else {
                 query += " where " + idFieldName + "=" + idValue;
             }
+            query += " ALLOW FILTERING";
             client.connect();
             logger.info("Connection to cassandra successful");
             logger.info("Query: " + query);
@@ -98,18 +99,18 @@ public class QueryBuilder {
     }
 
     public <T> void insertData(T o, String idFieldName) {
-        try {
-            Method getterId = o.getClass().getMethod("get" + idFieldName
-                    .replaceFirst(idFieldName.substring(0, 1), idFieldName
-                            .substring(0, 1).toUpperCase()));
-            if (getDataById(o.getClass(), idFieldName, getterId.invoke(o)) == null) {
-                logger.info("Object not found, trying to insert data.");
-                updateData(o, idFieldName,null,null);
-                return;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Method getterId = o.getClass().getMethod("get" + idFieldName
+//                    .replaceFirst(idFieldName.substring(0, 1), idFieldName
+//                            .substring(0, 1).toUpperCase()));
+//            if (getDataById(o.getClass(), idFieldName, getterId.invoke(o)) != null) {
+//                logger.info("Object found, trying to update data.");
+//                updateData(o, idFieldName, null, null);
+//                return;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         try (CassandraConnector client = new CassandraConnector()) {
             String query = insertQuery(o);
@@ -133,7 +134,7 @@ public class QueryBuilder {
         String value = "";
         for (Field field : c.getDeclaredFields()) {
             query += field.getName() + ", ";
-            if (field.getType().equals(String.class)) {
+            if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
                 Method method = c.getMethod("get" + field.getName()
                         .replaceFirst(field.getName().substring(0, 1), field.getName()
                                 .substring(0, 1).toUpperCase()));
@@ -171,7 +172,7 @@ public class QueryBuilder {
         }
 
         try (CassandraConnector client = new CassandraConnector()) {
-            String query = updateQuery(o, idFieldName,updateByFieldName,value);
+            String query = updateQuery(o, idFieldName, updateByFieldName, value);
             client.connect();
             logger.info("Connection to cassandra successful");
             logger.info("Query: " + query);
@@ -211,7 +212,7 @@ public class QueryBuilder {
         query = query.substring(0, query.lastIndexOf(","));
 
 
-        if (updateByFieldName != null && updateByFieldName.trim() != "") {
+        if (updateByFieldName == null || updateByFieldName.trim() == "") {
             Field idField = c.getDeclaredField(idFieldName);
             Method getterId = c.getMethod("get" + idFieldName
                     .replaceFirst(idFieldName.substring(0, 1), idFieldName
