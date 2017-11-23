@@ -9,7 +9,6 @@ public class CassandraDataUtility {
     public List<Row> getRowList(String query) {
         try (CassandraConnector client = new CassandraConnector()) {
             client.connect();
-            System.out.println("success");
             ResultSet resultSet = client.getSession().execute(query);
             return resultSet.all();
         }

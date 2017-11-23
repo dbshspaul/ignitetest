@@ -28,6 +28,7 @@ public class CacheStroreForContract extends CacheStoreAdapter<Integer, Contract>
         Contract contract = entry.getValue();
         logger.info(">>> Store write [key=" + key + ", val=" + contract + ']');
         queryBuilder.insertData(contract, "contract_id");
+        ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
     }
 
     @Override
@@ -41,7 +42,6 @@ public class CacheStroreForContract extends CacheStoreAdapter<Integer, Contract>
         queryBuilder.getAllData(Contract.class).stream().forEach(contract -> {
             try {
                 clo.apply(contract.getContract_id(), contract);
-                ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
             } catch (Exception e) {
                 ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
                 e.printStackTrace();
