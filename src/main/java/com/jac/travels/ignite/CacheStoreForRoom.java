@@ -30,7 +30,7 @@ public class CacheStoreForRoom extends CacheStoreAdapter<Integer, Room> {
         Room room = entry.getValue();
         try {
             logger.info(">>> Store write [key=" + key + ", val=" + room + ']');
-            queryBuilder.insertData(room, "room_id");
+            queryBuilder.insertData(room);
             ProducerUtil.sendMessage("kafkaCacheTopic", room.toString());
         } catch (Exception e) {
             ProducerUtil.sendMessage("kafkaErrorTopic", room.toString());

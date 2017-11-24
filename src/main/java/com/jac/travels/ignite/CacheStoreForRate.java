@@ -27,8 +27,14 @@ public class CacheStoreForRate extends CacheStoreAdapter<LocalDate, Rate> {
     public void write(Cache.Entry<? extends LocalDate, ? extends Rate> entry) throws CacheWriterException {
         LocalDate key = entry.getKey();
         Rate rate = entry.getValue();
-        logger.info(">>> Store write [key=" + key + ", val=" + rate + ']');
-        queryBuilder.insertData(rate, "stay_date");
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + rate + ']');
+            queryBuilder.insertData(rate);
+            ProducerUtil.sendMessage("kafkaCacheTopic", rate.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", rate.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

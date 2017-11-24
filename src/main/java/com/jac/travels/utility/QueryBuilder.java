@@ -98,28 +98,14 @@ public class QueryBuilder {
         return o;
     }
 
-    public <T> void insertData(T o, String idFieldName) {
-//        try {
-//            Method getterId = o.getClass().getMethod("get" + idFieldName
-//                    .replaceFirst(idFieldName.substring(0, 1), idFieldName
-//                            .substring(0, 1).toUpperCase()));
-//            if (getDataById(o.getClass(), idFieldName, getterId.invoke(o)) != null) {
-//                logger.info("Object found, trying to update data.");
-//                updateData(o, idFieldName, null, null);
-//                return;
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
+    public <T> void insertData(T o) {
         try (CassandraConnector client = new CassandraConnector()) {
             String query = insertQuery(o);
             client.connect();
             logger.info("Connection to cassandra successful");
             logger.info("Query: " + query);
-            client.getSession().execute(query);
-            ProducerUtil.sendMessage("kafkaCacheTopic", o.toString());
-            logger.info("1 row inserted.");
+            ResultSet execute = client.getSession().execute(query);
+            logger.info("1 row inserted. "+execute.toString());
         } catch (Exception e) {
             ProducerUtil.sendMessage("kafkaErrorTopic", o.toString());
             logger.error("Unable to save data. " + e);
@@ -164,7 +150,7 @@ public class QueryBuilder {
                             .substring(0, 1).toUpperCase()));
             if (getDataById(o.getClass(), idFieldName, getterId.invoke(o)) == null) {
                 logger.info("Object not found, trying to insert data.");
-                insertData(o, idFieldName);
+                insertData(o);
                 return;
             }
         } catch (Exception e) {

@@ -10,8 +10,8 @@ import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
 
+import javax.annotation.PostConstruct;
 import javax.cache.configuration.FactoryBuilder;
-import java.util.UUID;
 
 public class IgniteDemo {
 
@@ -25,11 +25,12 @@ public class IgniteDemo {
 
     private static final IgniteDemo instance = new IgniteDemo();
 
-    public static IgniteDemo getInstance(){
+    public static IgniteDemo getInstance() {
         return instance;
     }
 
 
+    @PostConstruct
     public void startCache() {
         Ignite ignite = Ignition.start();
 
@@ -90,7 +91,7 @@ public class IgniteDemo {
         this.rateCache = rateCache;
     }
 
-    public static void main(String[] args) {
-        IgniteDemo.getInstance();
-    }
+//    public static void main(String[] args) {
+////        IgniteDemo.getInstance();
+//    }
 }

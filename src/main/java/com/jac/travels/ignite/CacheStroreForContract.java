@@ -26,9 +26,14 @@ public class CacheStroreForContract extends CacheStoreAdapter<Integer, Contract>
     public void write(Cache.Entry<? extends Integer, ? extends Contract> entry) throws CacheWriterException {
         Integer key = entry.getKey();
         Contract contract = entry.getValue();
-        logger.info(">>> Store write [key=" + key + ", val=" + contract + ']');
-        queryBuilder.insertData(contract, "contract_id");
-        ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + contract + ']');
+            queryBuilder.insertData(contract);
+            ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override
