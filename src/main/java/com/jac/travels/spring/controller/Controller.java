@@ -40,6 +40,7 @@ public class Controller {
     RateConverter rateConverter;
 
     IgniteCache<LocalDate, Rate> rateIgniteCache = IgniteDemo.getInstance().getRateCache();
+    IgniteCache<Integer, Room> roomIgniteCache = IgniteDemo.getInstance().getRoomCache();
 
 
     @GetMapping("/rooms")
@@ -83,12 +84,10 @@ public class Controller {
         return contractService.getAll();
     }
 
-    @PutMapping(name = "/rate/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/rate/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseEntity updateRateByRoom(@RequestParam(name = "stay-date") int day, @RequestParam(name = "rate", required = false) Rate rate) {
-
+    public ResponseEntity insertRate(@RequestParam(name = "rate", required = false) Rate rate) {
         try {
-            LocalDate localDate = LocalDate.fromDaysSinceEpoch(day);
             rateIgniteCache.put(rate.getStay_date(),rate);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
@@ -101,4 +100,22 @@ public class Controller {
             return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
         }
     }
+
+    @PostMapping(value = "/room/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room){
+        try {
+            roomIgniteCache.put(room.getRoom_id(),room);
+            Map<String, String> response = new HashMap<>();
+            response.put("msg", "Data updated successfully.");
+            return new ResponseEntity(response, HttpStatus.CREATED);
+        } catch (Exception e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("msg", "Failed to find data.");
+            response.put("cause", e.getMessage());
+            e.printStackTrace();
+            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
+
 }
