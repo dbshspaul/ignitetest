@@ -20,7 +20,7 @@ public class CacheStoreForRate extends CacheStoreAdapter<LocalDate, Rate> {
     @Override
     public Rate load(LocalDate localDate) throws CacheLoaderException {
         logger.info(">>> Store load [key=" + localDate + ']');
-        return queryBuilder.getDataById(Rate.class, "room_id", localDate);
+        return queryBuilder.getDataById(Rate.class, "stay_date", localDate);
     }
 
     @Override
