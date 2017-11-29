@@ -20,7 +20,8 @@ public class CacheStoreForRate extends CacheStoreAdapter<LocalDate, Rate> {
     @Override
     public Rate load(LocalDate localDate) throws CacheLoaderException {
         logger.info(">>> Store load [key=" + localDate + ']');
-        return queryBuilder.getDataById(Rate.class, "stay_date", localDate);
+        //return queryBuilder.getDataById(Rate.class, "stay_date", localDate);
+        return null;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class CacheStoreForRate extends CacheStoreAdapter<LocalDate, Rate> {
         Rate rate = entry.getValue();
         try {
             logger.info(">>> Store write [key=" + key + ", val=" + rate + ']');
-            queryBuilder.insertData(rate);
+            //queryBuilder.insertData(rate);
             ProducerUtil.sendMessage("kafkaCacheTopic", rate.toString());
         } catch (Exception e) {
             ProducerUtil.sendMessage("kafkaErrorTopic", rate.toString());

@@ -51,12 +51,14 @@ public class Controller {
 
     @GetMapping("/rate/{id}")
     @ResponseBody
-    public ResponseEntity rateByStayDate(@PathVariable(name = "id")int day) {
+    public ResponseEntity rateByStayDate(@PathVariable(name = "id") int day) {
         try {
             LocalDate localDate = LocalDate.fromDaysSinceEpoch(day);
-            QueryCursor<Cache.Entry<LocalDate, Rate>> query = rateIgniteCache.query(new ScanQuery<LocalDate, Rate>((k, p) -> p.getStay_date().equals(localDate)));
-            List<Cache.Entry<LocalDate, Rate>> all = query.getAll();
-            return new ResponseEntity(all.get(0).getValue(), HttpStatus.FOUND);
+//            QueryCursor<Cache.Entry<LocalDate, Rate>> query = rateIgniteCache.query(new ScanQuery<LocalDate, Rate>((k, p) -> p.getStay_date().equals(localDate)));
+//            List<Cache.Entry<LocalDate, Rate>> all = query.getAll();
+//            return new ResponseEntity(all.get(0).getValue(), HttpStatus.FOUND);
+            return new ResponseEntity(rateIgniteCache.get(localDate), HttpStatus.FOUND);
+
         } catch (Exception e) {
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Failed to find data.");
@@ -68,8 +70,10 @@ public class Controller {
 
     @GetMapping("/rates")
     @ResponseBody
-    public List<Rate> allRates() {
-        return rateService.getAll();
+    public ResponseEntity allRates() {
+        QueryCursor<Cache.Entry<LocalDate, Rate>> query = rateIgniteCache.query(new ScanQuery<LocalDate, Rate>((k, p) -> true));
+        List<Cache.Entry<LocalDate, Rate>> all = query.getAll();
+        return new ResponseEntity(all, HttpStatus.FOUND);
     }
 
     @GetMapping("/rate-plans")
@@ -88,7 +92,7 @@ public class Controller {
     @ResponseBody
     public ResponseEntity insertRate(@RequestParam(name = "rate", required = false) Rate rate) {
         try {
-            rateIgniteCache.put(rate.getStay_date(),rate);
+            rateIgniteCache.put(rate.getStay_date(), rate);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
             return new ResponseEntity(response, HttpStatus.CREATED);
@@ -103,9 +107,9 @@ public class Controller {
 
     @PostMapping(value = "/room/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room){
+    public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room) {
         try {
-            roomIgniteCache.put(room.getRoom_id(),room);
+            roomIgniteCache.put(room.getRoom_id(), room);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
             return new ResponseEntity(response, HttpStatus.CREATED);
