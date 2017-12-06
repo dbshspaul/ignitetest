@@ -8,6 +8,7 @@ import org.springframework.data.cassandra.mapping.Table;
 public class Contract {
     @PrimaryKey
     private Integer contract_id;
+    @PrimaryKey
     private Integer property_id;
     private LocalDate booking_from;
     private LocalDate booking_to;

@@ -8,6 +8,7 @@ import org.springframework.data.cassandra.mapping.Table;
 public class Rate {
     @PrimaryKey
     private LocalDate stay_date;
+    @PrimaryKey
     private Integer rate_plan_id;
     private Float adult02_charge;
     private Float adult03_charge;

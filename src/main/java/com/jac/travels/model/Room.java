@@ -7,6 +7,7 @@ import org.springframework.data.cassandra.mapping.Table;
 public class Room {
     @PrimaryKey
     private Integer room_id;
+    @PrimaryKey
     private Integer contract_id;
     private Integer adult_max;
     private Integer adult_min;

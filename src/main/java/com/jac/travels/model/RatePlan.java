@@ -11,6 +11,7 @@ import java.util.Set;
 
 @Table("rate_plan")
 public class RatePlan {
+    @PrimaryKey
     private Integer room_id;
     @PrimaryKey
     private Integer rate_plan_id;

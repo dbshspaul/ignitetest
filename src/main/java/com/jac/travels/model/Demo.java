@@ -1,5 +1,8 @@
 package com.jac.travels.model;
 
+import org.springframework.data.cassandra.mapping.Table;
+
+@Table("contract")
 public class Demo {
     int id;
     String name;
