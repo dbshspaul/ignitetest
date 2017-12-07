@@ -1,31 +1,17 @@
-package com.jac.travels.model;
+package com.jac.travels.idclass;
 
 import com.datastax.driver.core.LocalDate;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
 
-import java.util.List;
+import java.util.Objects;
 
-@Table("rate_search")
-public class RateSearch {
-    @PrimaryKey
+public class RateSearchPK {
     private Integer rate_plan_id;
-    @PrimaryKey
     private Integer board_basis_id;
-    @PrimaryKey
     private Byte adults;
-    @PrimaryKey
     private Byte infants;
-    @PrimaryKey
     private String child_occupancy_key;
-    @PrimaryKey
     private String youth_occupancy_key;
-    @PrimaryKey
     private LocalDate stay_date;
-    private Float base_rate;
-    private List<Float> bbu_rates;
-    private List<Float> occupant_rates;
-    private Float rate;
 
     public Integer getRate_plan_id() {
         return rate_plan_id;
@@ -83,35 +69,36 @@ public class RateSearch {
         this.stay_date = stay_date;
     }
 
-    public Float getBase_rate() {
-        return base_rate;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RateSearchPK)) return false;
+        RateSearchPK that = (RateSearchPK) o;
+        return Objects.equals(getRate_plan_id(), that.getRate_plan_id()) &&
+                Objects.equals(getBoard_basis_id(), that.getBoard_basis_id()) &&
+                Objects.equals(getAdults(), that.getAdults()) &&
+                Objects.equals(getInfants(), that.getInfants()) &&
+                Objects.equals(getChild_occupancy_key(), that.getChild_occupancy_key()) &&
+                Objects.equals(getYouth_occupancy_key(), that.getYouth_occupancy_key()) &&
+                Objects.equals(getStay_date(), that.getStay_date());
     }
 
-    public void setBase_rate(Float base_rate) {
-        this.base_rate = base_rate;
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getRate_plan_id(), getBoard_basis_id(), getAdults(), getInfants(), getChild_occupancy_key(), getYouth_occupancy_key(), getStay_date());
     }
 
-    public List<Float> getBbu_rates() {
-        return bbu_rates;
-    }
-
-    public void setBbu_rates(List<Float> bbu_rates) {
-        this.bbu_rates = bbu_rates;
-    }
-
-    public List<Float> getOccupant_rates() {
-        return occupant_rates;
-    }
-
-    public void setOccupant_rates(List<Float> occupant_rates) {
-        this.occupant_rates = occupant_rates;
-    }
-
-    public Float getRate() {
-        return rate;
-    }
-
-    public void setRate(Float rate) {
-        this.rate = rate;
+    @Override
+    public String toString() {
+        return "RateSearchPK:{" +
+                "rate_plan_id=" + rate_plan_id +
+                ", board_basis_id=" + board_basis_id +
+                ", adults=" + adults +
+                ", infants=" + infants +
+                ", child_occupancy_key='" + child_occupancy_key + '\'' +
+                ", youth_occupancy_key='" + youth_occupancy_key + '\'' +
+                ", stay_date=" + stay_date +
+                '}';
     }
 }

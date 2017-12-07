@@ -5,7 +5,7 @@ import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("property_allocation")
-public class RropertyAllocation {
+public class PropertyAllocation {
     @PrimaryKey
     private Integer property_id;
     @PrimaryKey
