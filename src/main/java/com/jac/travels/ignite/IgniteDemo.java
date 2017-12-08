@@ -1,6 +1,7 @@
 package com.jac.travels.ignite;
 
 import com.datastax.driver.core.LocalDate;
+import com.jac.travels.ignite.cache.store.*;
 import com.jac.travels.model.Contract;
 import com.jac.travels.model.Rate;
 import com.jac.travels.model.Room;
@@ -75,18 +76,39 @@ public class IgniteDemo {
         roomCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(CacheStoreForRoom.class));
         roomCache = ignite.getOrCreateCache(roomCacheConfig);
 
+        contractCache=createCache(ignite,"myCacheContract",CacheStroreForContract.class);
+        createCache(ignite,"boardBasisAllocationCacheStore",BoardBasisAllocationCacheStore.class);
+        createCache(ignite,"boardBasisAllocationCacheStore",CacheStoreForRate.class);
+        createCache(ignite,"contractAllocationCacheStore",ContractAllocationCacheStore.class);
+        createCache(ignite,"contractCacheStore",ContractCacheStore.class);
+        createCache(ignite,"globalStopSellCacheStore",GlobalStopSellCacheStore.class);
+        createCache(ignite,"propertyAllocationCacheStore",PropertyAllocationCacheStore.class);
+        createCache(ignite,"propertyCacheStore",PropertyCacheStore.class);
+        createCache(ignite,"rateBoardBasisUpgradeCacheStore",RateBoardBasisUpgradeCacheStore.class);
+        createCache(ignite,"ratePlanAllocationCacheStore",RatePlanAllocationCacheStore.class);
+        createCache(ignite,"ratePlanCacheStore",RatePlanCacheStore.class);
+        createCache(ignite,"rateSearchCacheStore",RateSearchCacheStore.class);
+        createCache(ignite,"rateSupplementCacheStore",RateSupplementCacheStore.class);
+        createCache(ignite,"rateSupplementSearchCacheStore",RateSupplementSearchCacheStore.class);
+        createCache(ignite,"roomAllocationCacheStore",RoomAllocationCacheStore.class);
+        createCache(ignite,"roomCacheStore",RoomCacheStore.class);
+        createCache(ignite,"specialOfferCacheStore",SpecialOfferCacheStore.class);
+        createCache(ignite,"specialOfferDiscountCacheStore",SpecialOfferDiscountCacheStore.class);
+        createCache(ignite,"supplementCacheStore",SupplementCacheStore.class);
+
+    }
+
+    private IgniteCache createCache(Ignite ignite,String cacheName,Class clazz) {
         CacheConfiguration contractCacheConfig = new CacheConfiguration();
-        contractCacheConfig.setName("myCacheContract");
+        contractCacheConfig.setName(cacheName);
         contractCacheConfig.setReadThrough(true);
         contractCacheConfig.setWriteThrough(true);
         contractCacheConfig.setWriteBehindEnabled(true);
         contractCacheConfig.setBackups(1);
         contractCacheConfig.setCacheMode(CacheMode.PARTITIONED);
-        contractCacheConfig.setIndexedTypes(Integer.class, Contract.class);
-        contractCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(CacheStroreForContract.class));
-        contractCache = ignite.getOrCreateCache(contractCacheConfig);
-
-
+//        contractCacheConfig.setIndexedTypes(Integer.class, Contract.class);
+        contractCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(clazz));
+        return ignite.getOrCreateCache(contractCacheConfig);
     }
 
     public IgniteCache<Integer, Room> getRoomCache() {
