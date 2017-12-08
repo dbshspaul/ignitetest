@@ -1,9 +1,11 @@
 package com.jac.travels.model;
 
+import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-@Table("contract")
+@Table("demo")
 public class Demo {
+    @PrimaryKey
     int id;
     String name;
     String mobile;

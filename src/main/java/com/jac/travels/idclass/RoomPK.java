@@ -1,9 +1,16 @@
 package com.jac.travels.idclass;
 
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
+
 import java.util.Objects;
 
+@PrimaryKeyClass
 public class RoomPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer room_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer contract_id;
 
     public Integer getRoom_id() {

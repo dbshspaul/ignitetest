@@ -1,14 +1,13 @@
 package com.jac.travels.model;
 
+import com.jac.travels.idclass.RoomPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("room")
 public class Room {
     @PrimaryKey
-    private Integer room_id;
-    @PrimaryKey
-    private Integer contract_id;
+    private RoomPK roomPK;
     private Integer adult_max;
     private Integer adult_min;
     private Integer adult_with_child_max;
@@ -43,20 +42,12 @@ public class Room {
     private Integer youth_max_age;
     private Integer youth_min_age;
 
-    public Integer getContract_id() {
-        return contract_id;
+    public RoomPK getRoomPK() {
+        return roomPK;
     }
 
-    public void setContract_id(Integer contract_id) {
-        this.contract_id = contract_id;
-    }
-
-    public Integer getRoom_id() {
-        return room_id;
-    }
-
-    public void setRoom_id(Integer room_id) {
-        this.room_id = room_id;
+    public void setRoomPK(RoomPK roomPK) {
+        this.roomPK = roomPK;
     }
 
     public Integer getAdult_max() {
@@ -83,7 +74,7 @@ public class Room {
         this.adult_with_child_max = adult_with_child_max;
     }
 
-    public Boolean isAllow_child_close_out() {
+    public Boolean getAllow_child_close_out() {
         return allow_child_close_out;
     }
 
@@ -91,7 +82,7 @@ public class Room {
         this.allow_child_close_out = allow_child_close_out;
     }
 
-    public Boolean isAllow_child_youth_close_out() {
+    public Boolean getAllow_child_youth_close_out() {
         return allow_child_youth_close_out;
     }
 
@@ -99,7 +90,7 @@ public class Room {
         this.allow_child_youth_close_out = allow_child_youth_close_out;
     }
 
-    public Boolean isAuto_upgrade_child_to_adult() {
+    public Boolean getAuto_upgrade_child_to_adult() {
         return auto_upgrade_child_to_adult;
     }
 
@@ -107,7 +98,7 @@ public class Room {
         this.auto_upgrade_child_to_adult = auto_upgrade_child_to_adult;
     }
 
-    public Boolean isChild_occ_only_allowed() {
+    public Boolean getChild_occ_only_allowed() {
         return child_occ_only_allowed;
     }
 
@@ -155,7 +146,7 @@ public class Room {
         this.cots_max = cots_max;
     }
 
-    public Boolean isExclude_adult_child_combinations() {
+    public Boolean getExclude_adult_child_combinations() {
         return exclude_adult_child_combinations;
     }
 
@@ -163,7 +154,7 @@ public class Room {
         this.exclude_adult_child_combinations = exclude_adult_child_combinations;
     }
 
-    public Boolean isExtra_beds_used() {
+    public Boolean getExtra_beds_used() {
         return extra_beds_used;
     }
 
@@ -171,7 +162,7 @@ public class Room {
         this.extra_beds_used = extra_beds_used;
     }
 
-    public Boolean isExtra_rate_allocation() {
+    public Boolean getExtra_rate_allocation() {
         return extra_rate_allocation;
     }
 
@@ -179,7 +170,7 @@ public class Room {
         this.extra_rate_allocation = extra_rate_allocation;
     }
 
-    public Boolean isHas_durations_defined() {
+    public Boolean getHas_durations_defined() {
         return has_durations_defined;
     }
 
@@ -187,7 +178,7 @@ public class Room {
         this.has_durations_defined = has_durations_defined;
     }
 
-    public Boolean isHas_inventory_defined() {
+    public Boolean getHas_inventory_defined() {
         return has_inventory_defined;
     }
 
@@ -195,7 +186,7 @@ public class Room {
         this.has_inventory_defined = has_inventory_defined;
     }
 
-    public Boolean isHas_occ_allocation_defined() {
+    public Boolean getHas_occ_allocation_defined() {
         return has_occ_allocation_defined;
     }
 
@@ -203,7 +194,7 @@ public class Room {
         this.has_occ_allocation_defined = has_occ_allocation_defined;
     }
 
-    public Boolean isHas_split_inventory_defined() {
+    public Boolean getHas_split_inventory_defined() {
         return has_split_inventory_defined;
     }
 
@@ -219,7 +210,7 @@ public class Room {
         this.infant_max_age = infant_max_age;
     }
 
-    public Boolean isInfants_count_toward_occupancy() {
+    public Boolean getInfants_count_toward_occupancy() {
         return infants_count_toward_occupancy;
     }
 
@@ -299,7 +290,7 @@ public class Room {
         this.senior_min_age = senior_min_age;
     }
 
-    public Boolean isYouth_count_as_adults() {
+    public Boolean getYouth_count_as_adults() {
         return youth_count_as_adults;
     }
 
@@ -326,8 +317,7 @@ public class Room {
     @Override
     public String toString() {
         return "Room:{" +
-                "contract_id=" + contract_id +
-                ", room_id=" + room_id +
+                "roomPK=" + roomPK +
                 ", adult_max=" + adult_max +
                 ", adult_min=" + adult_min +
                 ", adult_with_child_max=" + adult_with_child_max +

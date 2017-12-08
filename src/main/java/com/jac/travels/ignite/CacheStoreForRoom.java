@@ -46,14 +46,14 @@ public class CacheStoreForRoom extends CacheStoreAdapter<Integer, Room> {
     @Override
     public void loadCache(IgniteBiInClosure<Integer, Room> clo, Object... args) {
         logger.info(">>> loading cache");
-        queryBuilder.getAllData(Room.class).stream().forEach(room -> {
-            try {
-                clo.apply(room.getRoom_id(), room);
-                ProducerUtil.sendMessage("kafkaCacheTopic", room.toString());
-            } catch (Exception e) {
-                ProducerUtil.sendMessage("kafkaErrorTopic", room.toString());
-                e.printStackTrace();
-            }
-        });
+//        queryBuilder.getAllData(Room.class).stream().forEach(room -> {
+//            try {
+//                clo.apply(room.getRoom_id(), room);
+//                ProducerUtil.sendMessage("kafkaCacheTopic", room.toString());
+//            } catch (Exception e) {
+//                ProducerUtil.sendMessage("kafkaErrorTopic", room.toString());
+//                e.printStackTrace();
+//            }
+//        });
     }
 }

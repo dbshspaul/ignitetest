@@ -1,31 +1,21 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.PropertyAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("property_allocation")
 public class PropertyAllocation {
     @PrimaryKey
-    private Integer property_id;
-    @PrimaryKey
-    private LocalDate stay_date;
+    private PropertyAllocationPK propertyAllocationPK;
     private Boolean stop_sell;
 
-    public Integer getProperty_id() {
-        return property_id;
+    public PropertyAllocationPK getPropertyAllocationPK() {
+        return propertyAllocationPK;
     }
 
-    public void setProperty_id(Integer property_id) {
-        this.property_id = property_id;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
+    public void setPropertyAllocationPK(PropertyAllocationPK propertyAllocationPK) {
+        this.propertyAllocationPK = propertyAllocationPK;
     }
 
     public Boolean getStop_sell() {

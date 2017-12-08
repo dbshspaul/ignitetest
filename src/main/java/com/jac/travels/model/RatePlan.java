@@ -1,20 +1,17 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
-import com.datastax.driver.core.TupleType;
+import com.jac.travels.idclass.RatePlanPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 @Table("rate_plan")
 public class RatePlan {
     @PrimaryKey
-    private Integer room_id;
-    @PrimaryKey
-    private Integer rate_plan_id;
+    private RatePlanPK ratePlanPK;
     private Integer adult_occupant_type_id;
     private Integer allocation_type_id;
     private Boolean allow_child_close_out;
@@ -55,7 +52,7 @@ public class RatePlan {
     private LocalDate stay_from;
     private LocalDate stay_to;
     private Set<Integer> supplement_ids;
-//    private Map<String,List<TupleType>> supported_occ_combos;
+    //    private Map<String,List<TupleType>> supported_occ_combos;
     private Boolean use_duration_based_pricing;
     private Integer youth_occupant_type_id;
     private Boolean youth_rate_split;
@@ -64,20 +61,12 @@ public class RatePlan {
     private Integer youth_rate_split2_max_age;
     private Integer youth_rate_split2_min_age;
 
-    public Integer getRoom_id() {
-        return room_id;
+    public RatePlanPK getRatePlanPK() {
+        return ratePlanPK;
     }
 
-    public void setRoom_id(Integer room_id) {
-        this.room_id = room_id;
-    }
-
-    public Integer getRate_plan_id() {
-        return rate_plan_id;
-    }
-
-    public void setRate_plan_id(Integer rate_plan_id) {
-        this.rate_plan_id = rate_plan_id;
+    public void setRatePlanPK(RatePlanPK ratePlanPK) {
+        this.ratePlanPK = ratePlanPK;
     }
 
     public Integer getAdult_occupant_type_id() {
@@ -182,6 +171,14 @@ public class RatePlan {
 
     public void setBrands(Set<Integer> brands) {
         this.brands = brands;
+    }
+
+    public Set<Byte> getChannel_type_ids() {
+        return channel_type_ids;
+    }
+
+    public void setChannel_type_ids(Set<Byte> channel_type_ids) {
+        this.channel_type_ids = channel_type_ids;
     }
 
     public Integer getChild_occupant_type_id() {
@@ -328,14 +325,6 @@ public class RatePlan {
         this.no_end_String = no_end_String;
     }
 
-    public Set<Byte> getChannel_type_ids() {
-        return channel_type_ids;
-    }
-
-    public void setChannel_type_ids(Set<Byte> channel_type_ids) {
-        this.channel_type_ids = channel_type_ids;
-    }
-
     public Map<Integer, Byte> getRate_code_ids() {
         return rate_code_ids;
     }
@@ -454,5 +443,59 @@ public class RatePlan {
 
     public void setYouth_rate_split2_min_age(Integer youth_rate_split2_min_age) {
         this.youth_rate_split2_min_age = youth_rate_split2_min_age;
+    }
+
+    @Override
+    public String toString() {
+        return "RatePlan:{" +
+                "ratePlanPK=" + ratePlanPK +
+                ", adult_occupant_type_id=" + adult_occupant_type_id +
+                ", allocation_type_id=" + allocation_type_id +
+                ", allow_child_close_out=" + allow_child_close_out +
+                ", allow_child_youth_close_out=" + allow_child_youth_close_out +
+                ", arrival_days=" + arrival_days +
+                ", base_rate_plan_id=" + base_rate_plan_id +
+                ", board_basis_id=" + board_basis_id +
+                ", board_basis_upgrade=" + board_basis_upgrade +
+                ", board_basis_upgrades=" + board_basis_upgrades +
+                ", booking_from=" + booking_from +
+                ", booking_to=" + booking_to +
+                ", booking_type_id=" + booking_type_id +
+                ", brands=" + brands +
+                ", channel_type_ids=" + channel_type_ids +
+                ", child_occupant_type_id=" + child_occupant_type_id +
+                ", child_rate_split=" + child_rate_split +
+                ", child_rate_split1_max_age=" + child_rate_split1_max_age +
+                ", child_rate_split1_min_age=" + child_rate_split1_min_age +
+                ", child_rate_split2_max_age=" + child_rate_split2_max_age +
+                ", child_rate_split2_min_age=" + child_rate_split2_min_age +
+                ", countries=" + countries +
+                ", duration_based_pricing_value=" + duration_based_pricing_value +
+                ", exclusive_to=" + exclusive_to +
+                ", floating_rate_discount=" + floating_rate_discount +
+                ", follow_on_rate_plan_id=" + follow_on_rate_plan_id +
+                ", gross_commission=" + gross_commission +
+                ", has_bbu_inventory_defined=" + has_bbu_inventory_defined +
+                ", has_durations_defined=" + has_durations_defined +
+                ", has_inventory_defined=" + has_inventory_defined +
+                ", has_split_inventory_defined=" + has_split_inventory_defined +
+                ", include_days=" + include_days +
+                ", no_end_String=" + no_end_String +
+                ", rate_code_ids=" + rate_code_ids +
+                ", rate_grid_type_id=" + rate_grid_type_id +
+                ", rate_plan_name='" + rate_plan_name + '\'' +
+                ", rate_type_id=" + rate_type_id +
+                ", special_offer_ids=" + special_offer_ids +
+                ", stay_from=" + stay_from +
+                ", stay_to=" + stay_to +
+                ", supplement_ids=" + supplement_ids +
+                ", use_duration_based_pricing=" + use_duration_based_pricing +
+                ", youth_occupant_type_id=" + youth_occupant_type_id +
+                ", youth_rate_split=" + youth_rate_split +
+                ", youth_rate_split1_max_age=" + youth_rate_split1_max_age +
+                ", youth_rate_split1_min_age=" + youth_rate_split1_min_age +
+                ", youth_rate_split2_max_age=" + youth_rate_split2_max_age +
+                ", youth_rate_split2_min_age=" + youth_rate_split2_min_age +
+                '}';
     }
 }

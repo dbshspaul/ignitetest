@@ -46,14 +46,14 @@ public class CacheStoreForRate extends CacheStoreAdapter<LocalDate, Rate> {
     @Override
     public void loadCache(IgniteBiInClosure<LocalDate, Rate> clo, Object... args) {
         logger.info(">>> loading cache");
-        queryBuilder.getAllData(Rate.class).stream().forEach(rate ->  {
-            try {
-                clo.apply(rate.getStay_date(), rate);
-                ProducerUtil.sendMessage("kafkaCacheTopic", rate.toString());
-            } catch (Exception e) {
-                ProducerUtil.sendMessage("kafkaErrorTopic", rate.toString());
-                e.printStackTrace();
-            }
-        });
+//        queryBuilder.getAllData(Rate.class).stream().forEach(rate ->  {
+//            try {
+//                clo.apply(rate.getStay_date(), rate);
+//                ProducerUtil.sendMessage("kafkaCacheTopic", rate.toString());
+//            } catch (Exception e) {
+//                ProducerUtil.sendMessage("kafkaErrorTopic", rate.toString());
+//                e.printStackTrace();
+//            }
+//        });
     }
 }

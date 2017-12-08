@@ -92,7 +92,7 @@ public class Controller {
     @ResponseBody
     public ResponseEntity insertRate(@RequestParam(name = "rate", required = false) Rate rate) {
         try {
-            rateIgniteCache.put(rate.getStay_date(), rate);
+            rateIgniteCache.put(rate.getRatePK().getStay_date(), rate);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
             return new ResponseEntity(response, HttpStatus.CREATED);
@@ -109,7 +109,7 @@ public class Controller {
     @ResponseBody
     public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room) {
         try {
-            roomIgniteCache.put(room.getRoom_id(), room);
+            roomIgniteCache.put(room.getRoomPK().getRoom_id(), room);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
             return new ResponseEntity(response, HttpStatus.CREATED);

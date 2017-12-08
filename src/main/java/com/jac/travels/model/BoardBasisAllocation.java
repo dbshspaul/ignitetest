@@ -1,35 +1,25 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.BoardBasisAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("board_basis_allocation")
 public class BoardBasisAllocation {
     @PrimaryKey
-    private Integer rate_plan_id;
-    @PrimaryKey
-    private Integer board_basis_id;
-    @PrimaryKey
+    private BoardBasisAllocationPK boardBasisAllocationPK;
     private LocalDate stay_date;
     private Integer allocation;
     private Boolean close_out;
     private Integer sold;
 
-    public Integer getRate_plan_id() {
-        return rate_plan_id;
+    public BoardBasisAllocationPK getBoardBasisAllocationPK() {
+        return boardBasisAllocationPK;
     }
 
-    public void setRate_plan_id(Integer rate_plan_id) {
-        this.rate_plan_id = rate_plan_id;
-    }
-
-    public Integer getBoard_basis_id() {
-        return board_basis_id;
-    }
-
-    public void setBoard_basis_id(Integer board_basis_id) {
-        this.board_basis_id = board_basis_id;
+    public void setBoardBasisAllocationPK(BoardBasisAllocationPK boardBasisAllocationPK) {
+        this.boardBasisAllocationPK = boardBasisAllocationPK;
     }
 
     public LocalDate getStay_date() {
@@ -62,5 +52,16 @@ public class BoardBasisAllocation {
 
     public void setSold(Integer sold) {
         this.sold = sold;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardBasisAllocation:{" +
+                "boardBasisAllocationPK=" + boardBasisAllocationPK +
+                ", stay_date=" + stay_date +
+                ", allocation=" + allocation +
+                ", close_out=" + close_out +
+                ", sold=" + sold +
+                '}';
     }
 }

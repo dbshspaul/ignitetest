@@ -24,16 +24,16 @@ public class CacheStroreForContract extends CacheStoreAdapter<Integer, Contract>
 
     @Override
     public void write(Cache.Entry<? extends Integer, ? extends Contract> entry) throws CacheWriterException {
-        Integer key = entry.getKey();
-        Contract contract = entry.getValue();
-        try {
-            logger.info(">>> Store write [key=" + key + ", val=" + contract + ']');
-            queryBuilder.insertData(contract);
-            ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
-        } catch (Exception e) {
-            ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
-            e.printStackTrace();
-        }
+//        Integer key = entry.getKey();
+//        Contract contract = entry.getValue();
+//        try {
+//            logger.info(">>> Store write [key=" + key + ", val=" + contract + ']');
+//            queryBuilder.insertData(contract);
+//            ProducerUtil.sendMessage("kafkaCacheTopic", contract.toString());
+//        } catch (Exception e) {
+//            ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
+//            e.printStackTrace();
+//        }
     }
 
     @Override
@@ -43,14 +43,14 @@ public class CacheStroreForContract extends CacheStoreAdapter<Integer, Contract>
 
     @Override
     public void loadCache(IgniteBiInClosure<Integer, Contract> clo, Object... args) {
-        logger.info(">>> loading cache");
-        queryBuilder.getAllData(Contract.class).stream().forEach(contract -> {
-            try {
-                clo.apply(contract.getContract_id(), contract);
-            } catch (Exception e) {
-                ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
-                e.printStackTrace();
-            }
-        });
+//        logger.info(">>> loading cache");
+//        queryBuilder.getAllData(Contract.class).stream().forEach(contract -> {
+//            try {
+//                clo.apply(contract.getContract_id(), contract);
+//            } catch (Exception e) {
+//                ProducerUtil.sendMessage("kafkaErrorTopic", contract.toString());
+//                e.printStackTrace();
+//            }
+//        });
     }
 }

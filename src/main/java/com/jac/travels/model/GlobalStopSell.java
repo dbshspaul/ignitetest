@@ -1,5 +1,6 @@
 package com.jac.travels.model;
 
+import com.jac.travels.idclass.GlobalStopSellPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -8,20 +9,18 @@ import java.util.Map;
 @Table("global_stop_sell")
 public class GlobalStopSell {
     @PrimaryKey
-    private	Integer	property_id;
-    private	Boolean	property_stop_sell;
-    @PrimaryKey
-    private	Integer	contract_id;
-    private	Boolean	contract_stop_sell;
+    private GlobalStopSellPK globalStopSellPK;
+    private Boolean property_stop_sell;
+    private Boolean contract_stop_sell;
     private Map<Integer, Boolean> rate_plan_stop_sell;
-    private	Map<Integer, Boolean>	room_stop_sell;
+    private Map<Integer, Boolean> room_stop_sell;
 
-    public Integer getProperty_id() {
-        return property_id;
+    public GlobalStopSellPK getGlobalStopSellPK() {
+        return globalStopSellPK;
     }
 
-    public void setProperty_id(Integer property_id) {
-        this.property_id = property_id;
+    public void setGlobalStopSellPK(GlobalStopSellPK globalStopSellPK) {
+        this.globalStopSellPK = globalStopSellPK;
     }
 
     public Boolean getProperty_stop_sell() {
@@ -30,14 +29,6 @@ public class GlobalStopSell {
 
     public void setProperty_stop_sell(Boolean property_stop_sell) {
         this.property_stop_sell = property_stop_sell;
-    }
-
-    public Integer getContract_id() {
-        return contract_id;
-    }
-
-    public void setContract_id(Integer contract_id) {
-        this.contract_id = contract_id;
     }
 
     public Boolean getContract_stop_sell() {
@@ -62,5 +53,16 @@ public class GlobalStopSell {
 
     public void setRoom_stop_sell(Map<Integer, Boolean> room_stop_sell) {
         this.room_stop_sell = room_stop_sell;
+    }
+
+    @Override
+    public String toString() {
+        return "GlobalStopSell:{" +
+                "globalStopSellPK=" + globalStopSellPK +
+                ", property_stop_sell=" + property_stop_sell +
+                ", contract_stop_sell=" + contract_stop_sell +
+                ", rate_plan_stop_sell=" + rate_plan_stop_sell +
+                ", room_stop_sell=" + room_stop_sell +
+                '}';
     }
 }

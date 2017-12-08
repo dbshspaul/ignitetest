@@ -1,13 +1,14 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RateSupplementPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("rate_supplement")
 public class RateSupplement {
     @PrimaryKey
-    private Integer supplement_i_d;
+    private RateSupplementPK rateSupplementPK;
     private Integer adult2_calculation_type_id;
     private Integer child1_calculation_type_id;
     private boolean child_price_split;
@@ -27,8 +28,6 @@ public class RateSupplement {
     private Integer youth_price_split2_max;
     private Integer youth_price_split2_min;
     private Integer youth_pricing_type_id;
-    @PrimaryKey
-    private LocalDate stay_date;
     private Float adult2_charge;
     private Float base_rate;
     private Float child1_charge;
@@ -39,12 +38,12 @@ public class RateSupplement {
     private Float youth1_charge;
     private Float youth1_split2_charge;
 
-    public Integer getSupplement_i_d() {
-        return supplement_i_d;
+    public RateSupplementPK getRateSupplementPK() {
+        return rateSupplementPK;
     }
 
-    public void setSupplement_i_d(Integer supplement_i_d) {
-        this.supplement_i_d = supplement_i_d;
+    public void setRateSupplementPK(RateSupplementPK rateSupplementPK) {
+        this.rateSupplementPK = rateSupplementPK;
     }
 
     public Integer getAdult2_calculation_type_id() {
@@ -199,14 +198,6 @@ public class RateSupplement {
         this.youth_pricing_type_id = youth_pricing_type_id;
     }
 
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
-    }
-
     public Float getAdult2_charge() {
         return adult2_charge;
     }
@@ -277,5 +268,40 @@ public class RateSupplement {
 
     public void setYouth1_split2_charge(Float youth1_split2_charge) {
         this.youth1_split2_charge = youth1_split2_charge;
+    }
+
+    @Override
+    public String toString() {
+        return "RateSupplement:{" +
+                "rateSupplementPK=" + rateSupplementPK +
+                ", adult2_calculation_type_id=" + adult2_calculation_type_id +
+                ", child1_calculation_type_id=" + child1_calculation_type_id +
+                ", child_price_split=" + child_price_split +
+                ", child_price_split1_max=" + child_price_split1_max +
+                ", child_price_split1_min=" + child_price_split1_min +
+                ", child_price_split2_max=" + child_price_split2_max +
+                ", child_price_split2_min=" + child_price_split2_min +
+                ", child_pricing_type_id=" + child_pricing_type_id +
+                ", double_calculation_type_id=" + double_calculation_type_id +
+                ", occupant_type_id=" + occupant_type_id +
+                ", single_calculation_type_id=" + single_calculation_type_id +
+                ", triple_calculation_type_id=" + triple_calculation_type_id +
+                ", youth1_calculation_type_id=" + youth1_calculation_type_id +
+                ", youth_price_split=" + youth_price_split +
+                ", youth_price_split1_max=" + youth_price_split1_max +
+                ", youth_price_split1_min=" + youth_price_split1_min +
+                ", youth_price_split2_max=" + youth_price_split2_max +
+                ", youth_price_split2_min=" + youth_price_split2_min +
+                ", youth_pricing_type_id=" + youth_pricing_type_id +
+                ", adult2_charge=" + adult2_charge +
+                ", base_rate=" + base_rate +
+                ", child1_charge=" + child1_charge +
+                ", child1_split2_charge=" + child1_split2_charge +
+                ", double_occ_charge=" + double_occ_charge +
+                ", single_occ_charge=" + single_occ_charge +
+                ", triple_occ_charge=" + triple_occ_charge +
+                ", youth1_charge=" + youth1_charge +
+                ", youth1_split2_charge=" + youth1_split2_charge +
+                '}';
     }
 }

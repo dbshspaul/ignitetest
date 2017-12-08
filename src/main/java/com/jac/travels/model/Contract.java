@@ -1,15 +1,14 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.ContractPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("contract")
 public class Contract {
     @PrimaryKey
-    private Integer contract_id;
-    @PrimaryKey
-    private Integer property_id;
+    private ContractPK contractPK;
     private LocalDate booking_from;
     private LocalDate booking_to;
     private String buying_currency;
@@ -22,20 +21,12 @@ public class Contract {
     private LocalDate stay_from;
     private LocalDate stay_to;
 
-    public Integer getProperty_id() {
-        return property_id;
+    public ContractPK getContractPK() {
+        return contractPK;
     }
 
-    public void setProperty_id(Integer property_id) {
-        this.property_id = property_id;
-    }
-
-    public Integer getContract_id() {
-        return contract_id;
-    }
-
-    public void setContract_id(Integer contract_id) {
-        this.contract_id = contract_id;
+    public void setContractPK(ContractPK contractPK) {
+        this.contractPK = contractPK;
     }
 
     public LocalDate getBooking_from() {
@@ -129,8 +120,7 @@ public class Contract {
     @Override
     public String toString() {
         return "Contract:{" +
-                "property_id=" + property_id +
-                ", contract_id=" + contract_id +
+                "contractPK=" + contractPK +
                 ", booking_from=" + booking_from +
                 ", booking_to=" + booking_to +
                 ", buying_currency='" + buying_currency + '\'' +

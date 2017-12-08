@@ -1,6 +1,6 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RateBoardBasisUpgradePK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -9,21 +9,19 @@ import java.util.Set;
 @Table("rate_board_basis_upgrade")
 public class RateBoardBasisUpgrade {
     @PrimaryKey
-    private Integer board_basis_upgrade_id;
+    private RateBoardBasisUpgradePK rateBoardBasisUpgradePK;
     private Integer board_basis_id;
     private Set<Integer> rate_plan_ids;
-    @PrimaryKey
-    private LocalDate stay_date;
     private Float adult_rate;
     private Float child_rate;
     private Float youth_rate;
 
-    public Integer getBoard_basis_upgrade_id() {
-        return board_basis_upgrade_id;
+    public RateBoardBasisUpgradePK getRateBoardBasisUpgradePK() {
+        return rateBoardBasisUpgradePK;
     }
 
-    public void setBoard_basis_upgrade_id(Integer board_basis_upgrade_id) {
-        this.board_basis_upgrade_id = board_basis_upgrade_id;
+    public void setRateBoardBasisUpgradePK(RateBoardBasisUpgradePK rateBoardBasisUpgradePK) {
+        this.rateBoardBasisUpgradePK = rateBoardBasisUpgradePK;
     }
 
     public Integer getBoard_basis_id() {
@@ -40,14 +38,6 @@ public class RateBoardBasisUpgrade {
 
     public void setRate_plan_ids(Set<Integer> rate_plan_ids) {
         this.rate_plan_ids = rate_plan_ids;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
     }
 
     public Float getAdult_rate() {
@@ -72,5 +62,17 @@ public class RateBoardBasisUpgrade {
 
     public void setYouth_rate(Float youth_rate) {
         this.youth_rate = youth_rate;
+    }
+
+    @Override
+    public String toString() {
+        return "RateBoardBasisUpgrade:{" +
+                "rateBoardBasisUpgradePK=" + rateBoardBasisUpgradePK +
+                ", board_basis_id=" + board_basis_id +
+                ", rate_plan_ids=" + rate_plan_ids +
+                ", adult_rate=" + adult_rate +
+                ", child_rate=" + child_rate +
+                ", youth_rate=" + youth_rate +
+                '}';
     }
 }

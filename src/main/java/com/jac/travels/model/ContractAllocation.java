@@ -1,33 +1,23 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.ContractAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("contract")
 public class ContractAllocation {
     @PrimaryKey
-    private Integer contract_id;
-    @PrimaryKey
-    private LocalDate stay_date;
+    private ContractAllocationPK contractAllocationPK;
     private Integer max_duration;
     private Integer min_duration;
     private Boolean stop_sell;
 
-    public Integer getContract_id() {
-        return contract_id;
+    public ContractAllocationPK getContractAllocationPK() {
+        return contractAllocationPK;
     }
 
-    public void setContract_id(Integer contract_id) {
-        this.contract_id = contract_id;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
+    public void setContractAllocationPK(ContractAllocationPK contractAllocationPK) {
+        this.contractAllocationPK = contractAllocationPK;
     }
 
     public Integer getMax_duration() {
@@ -52,5 +42,15 @@ public class ContractAllocation {
 
     public void setStop_sell(Boolean stop_sell) {
         this.stop_sell = stop_sell;
+    }
+
+    @Override
+    public String toString() {
+        return "ContractAllocation:{" +
+                "contractAllocationPK=" + contractAllocationPK +
+                ", max_duration=" + max_duration +
+                ", min_duration=" + min_duration +
+                ", stop_sell=" + stop_sell +
+                '}';
     }
 }

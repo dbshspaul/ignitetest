@@ -1,6 +1,6 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RoomAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -9,9 +9,7 @@ import java.time.ZonedDateTime;
 @Table("room_allocation")
 public class RoomAllocation {
     @PrimaryKey
-    private Integer room_id;
-    @PrimaryKey
-    private LocalDate stay_date;
+    private RoomAllocationPK roomAllocationPK;
     private Integer allocation;
     private Boolean child_close_out;
     private Boolean child_youth_close_out;
@@ -131,20 +129,12 @@ public class RoomAllocation {
     private ZonedDateTime utc_release_date_time;
     private ZonedDateTime utc_split_release_date_time;
 
-    public Integer getRoom_id() {
-        return room_id;
+    public RoomAllocationPK getRoomAllocationPK() {
+        return roomAllocationPK;
     }
 
-    public void setRoom_id(Integer room_id) {
-        this.room_id = room_id;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
+    public void setRoomAllocationPK(RoomAllocationPK roomAllocationPK) {
+        this.roomAllocationPK = roomAllocationPK;
     }
 
     public Integer getAllocation() {
@@ -1089,5 +1079,130 @@ public class RoomAllocation {
 
     public void setUtc_split_release_date_time(ZonedDateTime utc_split_release_date_time) {
         this.utc_split_release_date_time = utc_split_release_date_time;
+    }
+
+    @Override
+    public String toString() {
+        return "RoomAllocation:{" +
+                "roomAllocationPK=" + roomAllocationPK +
+                ", allocation=" + allocation +
+                ", child_close_out=" + child_close_out +
+                ", child_youth_close_out=" + child_youth_close_out +
+                ", close_out=" + close_out +
+                ", extra_bed_allocation=" + extra_bed_allocation +
+                ", extra_bed_sold=" + extra_bed_sold +
+                ", is_free_sale=" + is_free_sale +
+                ", max_duration=" + max_duration +
+                ", min_allocation=" + min_allocation +
+                ", min_duration=" + min_duration +
+                ", occupancy01_allocation=" + occupancy01_allocation +
+                ", occupancy01_sold=" + occupancy01_sold +
+                ", occupancy02_allocation=" + occupancy02_allocation +
+                ", occupancy02_sold=" + occupancy02_sold +
+                ", occupancy03_allocation=" + occupancy03_allocation +
+                ", occupancy03_sold=" + occupancy03_sold +
+                ", occupancy04_allocation=" + occupancy04_allocation +
+                ", occupancy04_sold=" + occupancy04_sold +
+                ", occupancy05_allocation=" + occupancy05_allocation +
+                ", occupancy05_sold=" + occupancy05_sold +
+                ", occupancy06_allocation=" + occupancy06_allocation +
+                ", occupancy06_sold=" + occupancy06_sold +
+                ", occupancy07_allocation=" + occupancy07_allocation +
+                ", occupancy07_sold=" + occupancy07_sold +
+                ", occupancy08_allocation=" + occupancy08_allocation +
+                ", occupancy08_sold=" + occupancy08_sold +
+                ", occupancy09_allocation=" + occupancy09_allocation +
+                ", occupancy09_sold=" + occupancy09_sold +
+                ", occupancy10_allocation=" + occupancy10_allocation +
+                ", occupancy10_sold=" + occupancy10_sold +
+                ", occupancy11_allocation=" + occupancy11_allocation +
+                ", occupancy11_sold=" + occupancy11_sold +
+                ", occupancy12_allocation=" + occupancy12_allocation +
+                ", occupancy12_sold=" + occupancy12_sold +
+                ", occupancy13_allocation=" + occupancy13_allocation +
+                ", occupancy13_sold=" + occupancy13_sold +
+                ", occupancy14_allocation=" + occupancy14_allocation +
+                ", occupancy14_sold=" + occupancy14_sold +
+                ", occupancy15_allocation=" + occupancy15_allocation +
+                ", occupancy15_sold=" + occupancy15_sold +
+                ", occupancy16_allocation=" + occupancy16_allocation +
+                ", occupancy16_sold=" + occupancy16_sold +
+                ", occupancy17_allocation=" + occupancy17_allocation +
+                ", occupancy17_sold=" + occupancy17_sold +
+                ", occupancy18_allocation=" + occupancy18_allocation +
+                ", occupancy18_sold=" + occupancy18_sold +
+                ", occupancy19_allocation=" + occupancy19_allocation +
+                ", occupancy19_sold=" + occupancy19_sold +
+                ", occupancy20_allocation=" + occupancy20_allocation +
+                ", occupancy20_sold=" + occupancy20_sold +
+                ", occupancy21_allocation=" + occupancy21_allocation +
+                ", occupancy21_sold=" + occupancy21_sold +
+                ", occupancy22_allocation=" + occupancy22_allocation +
+                ", occupancy22_sold=" + occupancy22_sold +
+                ", occupancy23_allocation=" + occupancy23_allocation +
+                ", occupancy23_sold=" + occupancy23_sold +
+                ", occupancy24_allocation=" + occupancy24_allocation +
+                ", occupancy24_sold=" + occupancy24_sold +
+                ", occupancy25_allocation=" + occupancy25_allocation +
+                ", occupancy25_sold=" + occupancy25_sold +
+                ", occupancy26_allocation=" + occupancy26_allocation +
+                ", occupancy26_sold=" + occupancy26_sold +
+                ", occupancy27_allocation=" + occupancy27_allocation +
+                ", occupancy27_sold=" + occupancy27_sold +
+                ", occupancy28_allocation=" + occupancy28_allocation +
+                ", occupancy28_sold=" + occupancy28_sold +
+                ", occupancy29_allocation=" + occupancy29_allocation +
+                ", occupancy29_sold=" + occupancy29_sold +
+                ", occupancy30_allocation=" + occupancy30_allocation +
+                ", occupancy30_sold=" + occupancy30_sold +
+                ", occupancy31_allocation=" + occupancy31_allocation +
+                ", occupancy31_sold=" + occupancy31_sold +
+                ", occupancy32_allocation=" + occupancy32_allocation +
+                ", occupancy32_sold=" + occupancy32_sold +
+                ", occupancy33_allocation=" + occupancy33_allocation +
+                ", occupancy33_sold=" + occupancy33_sold +
+                ", occupancy34_allocation=" + occupancy34_allocation +
+                ", occupancy34_sold=" + occupancy34_sold +
+                ", occupancy35_allocation=" + occupancy35_allocation +
+                ", occupancy35_sold=" + occupancy35_sold +
+                ", occupancy36_allocation=" + occupancy36_allocation +
+                ", occupancy36_sold=" + occupancy36_sold +
+                ", occupancy37_allocation=" + occupancy37_allocation +
+                ", occupancy37_sold=" + occupancy37_sold +
+                ", occupancy38_allocation=" + occupancy38_allocation +
+                ", occupancy38_sold=" + occupancy38_sold +
+                ", occupancy39_allocation=" + occupancy39_allocation +
+                ", occupancy39_sold=" + occupancy39_sold +
+                ", occupancy40_allocation=" + occupancy40_allocation +
+                ", occupancy40_sold=" + occupancy40_sold +
+                ", occupancy41_allocation=" + occupancy41_allocation +
+                ", occupancy41_sold=" + occupancy41_sold +
+                ", occupancy42_allocation=" + occupancy42_allocation +
+                ", occupancy42_sold=" + occupancy42_sold +
+                ", occupancy43_allocation=" + occupancy43_allocation +
+                ", occupancy43_sold=" + occupancy43_sold +
+                ", occupancy44_allocation=" + occupancy44_allocation +
+                ", occupancy44_sold=" + occupancy44_sold +
+                ", occupancy45_allocation=" + occupancy45_allocation +
+                ", occupancy45_sold=" + occupancy45_sold +
+                ", occupancy46_allocation=" + occupancy46_allocation +
+                ", occupancy46_sold=" + occupancy46_sold +
+                ", occupancy47_allocation=" + occupancy47_allocation +
+                ", occupancy47_sold=" + occupancy47_sold +
+                ", occupancy48_allocation=" + occupancy48_allocation +
+                ", occupancy48_sold=" + occupancy48_sold +
+                ", occupancy49_allocation=" + occupancy49_allocation +
+                ", occupancy49_sold=" + occupancy49_sold +
+                ", occupancy50_allocation=" + occupancy50_allocation +
+                ", occupancy50_sold=" + occupancy50_sold +
+                ", release=" + release +
+                ", sold=" + sold +
+                ", split_release=" + split_release +
+                ", split_release_allocation=" + split_release_allocation +
+                ", split_release_sold=" + split_release_sold +
+                ", total_sold=" + total_sold +
+                ", utc_release_date_time=" + utc_release_date_time +
+                ", utc_split_release_date_time=" + utc_split_release_date_time +
+                '}';
     }
 }

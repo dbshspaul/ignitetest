@@ -1,15 +1,13 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RatePK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
 @Table("rate")
 public class Rate {
     @PrimaryKey
-    private LocalDate stay_date;
-    @PrimaryKey
-    private Integer rate_plan_id;
+    private RatePK ratePK;
     private Float adult02_charge;
     private Float adult03_charge;
     private Float adult04_charge;
@@ -102,20 +100,12 @@ public class Rate {
     private Float youth_extra_split2_charge;
     private Float youth_split2_charge;
 
-    public Integer getRate_plan_id() {
-        return rate_plan_id;
+    public RatePK getRatePK() {
+        return ratePK;
     }
 
-    public void setRate_plan_id(Integer rate_plan_id) {
-        this.rate_plan_id = rate_plan_id;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
+    public void setRatePK(RatePK ratePK) {
+        this.ratePK = ratePK;
     }
 
     public Float getAdult02_charge() {
@@ -849,8 +839,7 @@ public class Rate {
     @Override
     public String toString() {
         return "Rate:{" +
-                "rate_plan_id=" + rate_plan_id +
-                ", stay_date='" + stay_date + '\'' +
+                "ratePK=" + ratePK +
                 ", adult02_charge=" + adult02_charge +
                 ", adult03_charge=" + adult03_charge +
                 ", adult04_charge=" + adult04_charge +

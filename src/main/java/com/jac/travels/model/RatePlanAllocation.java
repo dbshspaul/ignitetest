@@ -1,6 +1,7 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RatePlanAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
@@ -9,9 +10,7 @@ import java.time.ZonedDateTime;
 @Table("rate_plan_allocation")
 public class RatePlanAllocation {
     @PrimaryKey
-    private Integer rate_plan_id;
-    @PrimaryKey
-    private LocalDate stay_date;
+    private RatePlanAllocationPK ratePlanAllocationPK;
     private Integer allocation;
     private Boolean child_close_out;
     private Boolean child_youth_close_out;
@@ -31,20 +30,12 @@ public class RatePlanAllocation {
     private ZonedDateTime utc_release_date_time;
     private ZonedDateTime utc_split_release_date_time;
 
-    public Integer getRate_plan_id() {
-        return rate_plan_id;
+    public RatePlanAllocationPK getRatePlanAllocationPK() {
+        return ratePlanAllocationPK;
     }
 
-    public void setRate_plan_id(Integer rate_plan_id) {
-        this.rate_plan_id = rate_plan_id;
-    }
-
-    public LocalDate getStay_date() {
-        return stay_date;
-    }
-
-    public void setStay_date(LocalDate stay_date) {
-        this.stay_date = stay_date;
+    public void setRatePlanAllocationPK(RatePlanAllocationPK ratePlanAllocationPK) {
+        this.ratePlanAllocationPK = ratePlanAllocationPK;
     }
 
     public Integer getAllocation() {
@@ -189,5 +180,30 @@ public class RatePlanAllocation {
 
     public void setUtc_split_release_date_time(ZonedDateTime utc_split_release_date_time) {
         this.utc_split_release_date_time = utc_split_release_date_time;
+    }
+
+    @Override
+    public String toString() {
+        return "RatePlanAllocation:{" +
+                "ratePlanAllocationPK=" + ratePlanAllocationPK +
+                ", allocation=" + allocation +
+                ", child_close_out=" + child_close_out +
+                ", child_youth_close_out=" + child_youth_close_out +
+                ", close_out=" + close_out +
+                ", extra_bed_allocation=" + extra_bed_allocation +
+                ", extra_bed_sold=" + extra_bed_sold +
+                ", is_free_sale=" + is_free_sale +
+                ", max_duration=" + max_duration +
+                ", min_allocation=" + min_allocation +
+                ", min_duration=" + min_duration +
+                ", release=" + release +
+                ", sold=" + sold +
+                ", split_release=" + split_release +
+                ", split_release_allocation=" + split_release_allocation +
+                ", split_release_sold=" + split_release_sold +
+                ", total_sold=" + total_sold +
+                ", utc_release_date_time=" + utc_release_date_time +
+                ", utc_split_release_date_time=" + utc_split_release_date_time +
+                '}';
     }
 }
