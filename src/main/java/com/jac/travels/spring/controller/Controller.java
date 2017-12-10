@@ -1,10 +1,8 @@
 package com.jac.travels.spring.controller;
 
-import com.datastax.driver.core.LocalDate;
+import com.jac.travels.idclass.RatePK;
 import com.jac.travels.ignite.IgniteDemo;
-import com.jac.travels.model.Contract;
 import com.jac.travels.model.Rate;
-import com.jac.travels.model.RatePlan;
 import com.jac.travels.model.Room;
 import com.jac.travels.spring.converters.RateConverter;
 import com.jac.travels.spring.service.ContractService;
@@ -14,7 +12,7 @@ import com.jac.travels.spring.service.RoomService;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.cache.query.QueryCursor;
 import org.apache.ignite.cache.query.ScanQuery;
-import org.apache.ignite.transactions.TransactionException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,9 +36,8 @@ public class Controller {
     ContractService contractService;
     @Autowired
     RateConverter rateConverter;
-
-    IgniteCache<LocalDate, Rate> rateIgniteCache = IgniteDemo.getInstance().getRateCache();
-    IgniteCache<Integer, Room> roomIgniteCache = IgniteDemo.getInstance().getRoomCache();
+    @Autowired
+    IgniteDemo igniteDemo;
 
 
     @GetMapping("/rooms")
@@ -49,77 +46,88 @@ public class Controller {
         return roomService.getAll();
     }
 
-    @GetMapping("/rate/{id}")
+    @GetMapping("/rate-db")
     @ResponseBody
-    public ResponseEntity rateByStayDate(@PathVariable(name = "id") int day) {
+    public List<Rate> allRatesFromDb() {
+        return rateService.getAll();
+    }
+
+    @PostMapping("/rate")
+    @ResponseBody
+    public ResponseEntity rateByStayDate(@RequestParam(name = "rate-pk") RatePK ratePK) {
         try {
-            LocalDate localDate = LocalDate.fromDaysSinceEpoch(day);
+            IgniteCache<RatePK, Rate> rateIgniteCache = igniteDemo.getRateCache();
+//            LocalDate localDate = LocalDate.fromDaysSinceEpoch(day);
 //            QueryCursor<Cache.Entry<LocalDate, Rate>> query = rateIgniteCache.query(new ScanQuery<LocalDate, Rate>((k, p) -> p.getStay_date().equals(localDate)));
 //            List<Cache.Entry<LocalDate, Rate>> all = query.getAll();
 //            return new ResponseEntity(all.get(0).getValue(), HttpStatus.FOUND);
-            return new ResponseEntity(rateIgniteCache.get(localDate), HttpStatus.FOUND);
+            return new ResponseEntity(rateIgniteCache.get(ratePK), HttpStatus.FOUND);
 
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("msg", "Failed to find data.");
-            response.put("cause", e.getMessage());
-            e.printStackTrace();
-            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
+            return getErrorResponseEntity(e);
         }
     }
 
     @GetMapping("/rates")
     @ResponseBody
     public ResponseEntity allRates() {
-        QueryCursor<Cache.Entry<LocalDate, Rate>> query = rateIgniteCache.query(new ScanQuery<LocalDate, Rate>((k, p) -> true));
-        List<Cache.Entry<LocalDate, Rate>> all = query.getAll();
+        IgniteCache<RatePK, Rate> rateIgniteCache = igniteDemo.getRateCache();
+        QueryCursor<Cache.Entry<RatePK, Rate>> query = rateIgniteCache.query(new ScanQuery<RatePK, Rate>((k, p) -> true));
+        List<Cache.Entry<RatePK, Rate>> all = query.getAll();
         return new ResponseEntity(all, HttpStatus.FOUND);
     }
 
-    @GetMapping("/rate-plans")
-    @ResponseBody
-    public List<RatePlan> allRatePlans() {
-        return ratePlanService.getAll();
-    }
-
-    @GetMapping("/contracts")
-    @ResponseBody
-    public List<Contract> allContracts() {
-        return contractService.getAll();
-    }
-
-    @PostMapping(value = "/rate/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    //    @GetMapping("/rate-plans")
+//    @ResponseBody
+//    public List<RatePlan> allRatePlans() {
+//        return ratePlanService.getAll();
+//    }
+//
+//    @GetMapping("/contracts")
+//    @ResponseBody
+//    public List<Contract> allContracts() {
+//        return contractService.getAll();
+//    }
+//
+    @PostMapping(value = "/set-rate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseEntity insertRate(@RequestParam(name = "rate", required = false) Rate rate) {
         try {
-            rateIgniteCache.put(rate.getRatePK().getStay_date(), rate);
+            IgniteCache<RatePK, Rate> rateIgniteCache = igniteDemo.getRateCache();
+            rateIgniteCache.put(rate.getRatePK(), rate);
             Map<String, String> response = new HashMap<>();
             response.put("msg", "Data updated successfully.");
             return new ResponseEntity(response, HttpStatus.CREATED);
         } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("msg", "Failed to find data.");
-            response.put("cause", e.getMessage());
-            e.printStackTrace();
-            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
+            return getErrorResponseEntity(e);
         }
     }
+//
+//    @PostMapping(value = "/room/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    @ResponseBody
+//    public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room) {
+//        try {
+//            roomIgniteCache.put(room.getRoomPK().getRoom_id(), room);
+//            Map<String, String> response = new HashMap<>();
+//            response.put("msg", "Data updated successfully.");
+//            return new ResponseEntity(response, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            Map<String, String> response = new HashMap<>();
+//            response.put("msg", "Failed to find data.");
+//            response.put("cause", e.getMessage());
+//            e.printStackTrace();
+//            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
+//        }
+//    }
 
-    @PostMapping(value = "/room/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    public ResponseEntity insertRoom(@RequestParam(name = "room", required = false) Room room) {
-        try {
-            roomIgniteCache.put(room.getRoomPK().getRoom_id(), room);
-            Map<String, String> response = new HashMap<>();
-            response.put("msg", "Data updated successfully.");
-            return new ResponseEntity(response, HttpStatus.CREATED);
-        } catch (Exception e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("msg", "Failed to find data.");
-            response.put("cause", e.getMessage());
-            e.printStackTrace();
-            return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
-        }
+
+    @NotNull
+    private ResponseEntity getErrorResponseEntity(Exception e) {
+        Map<String, String> response = new HashMap<>();
+        response.put("msg", "Failed to find data.");
+        response.put("cause", e.getMessage());
+        e.printStackTrace();
+        return new ResponseEntity(response, HttpStatus.EXPECTATION_FAILED);
     }
 
 }

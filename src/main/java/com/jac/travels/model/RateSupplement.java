@@ -5,6 +5,8 @@ import com.jac.travels.idclass.RateSupplementPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
+
 @Table("rate_supplement")
 public class RateSupplement {
     @PrimaryKey
@@ -28,15 +30,15 @@ public class RateSupplement {
     private Integer youth_price_split2_max;
     private Integer youth_price_split2_min;
     private Integer youth_pricing_type_id;
-    private Float adult2_charge;
-    private Float base_rate;
-    private Float child1_charge;
-    private Float child1_split2_charge;
-    private Float double_occ_charge;
-    private Float single_occ_charge;
-    private Float triple_occ_charge;
-    private Float youth1_charge;
-    private Float youth1_split2_charge;
+    private BigDecimal adult2_charge;
+    private BigDecimal base_rate;
+    private BigDecimal child1_charge;
+    private BigDecimal child1_split2_charge;
+    private BigDecimal double_occ_charge;
+    private BigDecimal single_occ_charge;
+    private BigDecimal triple_occ_charge;
+    private BigDecimal youth1_charge;
+    private BigDecimal youth1_split2_charge;
 
     public RateSupplementPK getRateSupplementPK() {
         return rateSupplementPK;
@@ -198,75 +200,75 @@ public class RateSupplement {
         this.youth_pricing_type_id = youth_pricing_type_id;
     }
 
-    public Float getAdult2_charge() {
+    public BigDecimal getAdult2_charge() {
         return adult2_charge;
     }
 
-    public void setAdult2_charge(Float adult2_charge) {
+    public void setAdult2_charge(BigDecimal adult2_charge) {
         this.adult2_charge = adult2_charge;
     }
 
-    public Float getBase_rate() {
+    public BigDecimal getBase_rate() {
         return base_rate;
     }
 
-    public void setBase_rate(Float base_rate) {
+    public void setBase_rate(BigDecimal base_rate) {
         this.base_rate = base_rate;
     }
 
-    public Float getChild1_charge() {
+    public BigDecimal getChild1_charge() {
         return child1_charge;
     }
 
-    public void setChild1_charge(Float child1_charge) {
+    public void setChild1_charge(BigDecimal child1_charge) {
         this.child1_charge = child1_charge;
     }
 
-    public Float getChild1_split2_charge() {
+    public BigDecimal getChild1_split2_charge() {
         return child1_split2_charge;
     }
 
-    public void setChild1_split2_charge(Float child1_split2_charge) {
+    public void setChild1_split2_charge(BigDecimal child1_split2_charge) {
         this.child1_split2_charge = child1_split2_charge;
     }
 
-    public Float getDouble_occ_charge() {
+    public BigDecimal getDouble_occ_charge() {
         return double_occ_charge;
     }
 
-    public void setDouble_occ_charge(Float double_occ_charge) {
+    public void setDouble_occ_charge(BigDecimal double_occ_charge) {
         this.double_occ_charge = double_occ_charge;
     }
 
-    public Float getSingle_occ_charge() {
+    public BigDecimal getSingle_occ_charge() {
         return single_occ_charge;
     }
 
-    public void setSingle_occ_charge(Float single_occ_charge) {
+    public void setSingle_occ_charge(BigDecimal single_occ_charge) {
         this.single_occ_charge = single_occ_charge;
     }
 
-    public Float getTriple_occ_charge() {
+    public BigDecimal getTriple_occ_charge() {
         return triple_occ_charge;
     }
 
-    public void setTriple_occ_charge(Float triple_occ_charge) {
+    public void setTriple_occ_charge(BigDecimal triple_occ_charge) {
         this.triple_occ_charge = triple_occ_charge;
     }
 
-    public Float getYouth1_charge() {
+    public BigDecimal getYouth1_charge() {
         return youth1_charge;
     }
 
-    public void setYouth1_charge(Float youth1_charge) {
+    public void setYouth1_charge(BigDecimal youth1_charge) {
         this.youth1_charge = youth1_charge;
     }
 
-    public Float getYouth1_split2_charge() {
+    public BigDecimal getYouth1_split2_charge() {
         return youth1_split2_charge;
     }
 
-    public void setYouth1_split2_charge(Float youth1_split2_charge) {
+    public void setYouth1_split2_charge(BigDecimal youth1_split2_charge) {
         this.youth1_split2_charge = youth1_split2_charge;
     }
 

@@ -1,11 +1,17 @@
 package com.jac.travels.idclass;
 
 import com.datastax.driver.core.LocalDate;
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.Objects;
 
+@PrimaryKeyClass
 public class RatePK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private LocalDate stay_date;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer rate_plan_id;
 
     public LocalDate getStay_date() {

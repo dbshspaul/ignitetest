@@ -1,6 +1,7 @@
 package com.jac.travels.ignite.cache.store;
 
 import com.jac.travels.idclass.RateSearchPK;
+import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.RateSearch;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -17,12 +18,22 @@ public class RateSearchCacheStore extends CacheStoreAdapter<RateSearchPK, RateSe
 
     @Override
     public RateSearch load(RateSearchPK rateSearchPK) throws CacheLoaderException {
-        return null;
+        logger.info(">>> Store load [key=" + rateSearchPK + ']');
+        return queryBuilder.getDataById(RateSearch.class, rateSearchPK);
     }
 
     @Override
     public void write(Cache.Entry<? extends RateSearchPK, ? extends RateSearch> entry) throws CacheWriterException {
-
+        RateSearchPK key = entry.getKey();
+        RateSearch value = entry.getValue();
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + value + ']');
+            queryBuilder.insertData(value);
+            ProducerUtil.sendMessage("kafkaCacheTopic", value.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", value.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

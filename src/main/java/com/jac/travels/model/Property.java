@@ -3,13 +3,15 @@ package com.jac.travels.model;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
+
 @Table("property")
 public class Property {
     @PrimaryKey
     private	Integer	property_id;
     private	Integer	cutoff_time;
     private	String	name;
-    private	Float	star_rating;
+    private BigDecimal star_rating;
     private	Boolean	status;
     private	String	timezone_id;
 
@@ -37,11 +39,11 @@ public class Property {
         this.name = name;
     }
 
-    public Float getStar_rating() {
+    public BigDecimal getStar_rating() {
         return star_rating;
     }
 
-    public void setStar_rating(Float star_rating) {
+    public void setStar_rating(BigDecimal star_rating) {
         this.star_rating = star_rating;
     }
 

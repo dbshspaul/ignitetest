@@ -1,6 +1,7 @@
 package com.jac.travels.ignite.cache.store;
 
 import com.jac.travels.idclass.ContractAllocationPK;
+import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.ContractAllocation;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -17,12 +18,22 @@ public class ContractAllocationCacheStore extends CacheStoreAdapter<ContractAllo
 
     @Override
     public ContractAllocation load(ContractAllocationPK contractAllocationPK) throws CacheLoaderException {
-        return null;
+        logger.info(">>> Store load [key=" + contractAllocationPK + ']');
+        return queryBuilder.getDataById(ContractAllocation.class, contractAllocationPK);
     }
 
     @Override
     public void write(Cache.Entry<? extends ContractAllocationPK, ? extends ContractAllocation> entry) throws CacheWriterException {
-
+        ContractAllocationPK key = entry.getKey();
+        ContractAllocation value = entry.getValue();
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + value + ']');
+            queryBuilder.insertData(value);
+            ProducerUtil.sendMessage("kafkaCacheTopic", value.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", value.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

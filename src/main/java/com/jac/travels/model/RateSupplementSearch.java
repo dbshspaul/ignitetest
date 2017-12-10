@@ -1,16 +1,17 @@
 package com.jac.travels.model;
 
-import com.datastax.driver.core.LocalDate;
 import com.jac.travels.idclass.RateSupplementSearchPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
+
+import java.math.BigDecimal;
 
 @Table("rate_supplement_search")
 public class RateSupplementSearch {
     @PrimaryKey
     private RateSupplementSearchPK rateSupplementSearchPK;
     private Boolean close_out;
-    private Float supplement;
+    private BigDecimal supplement;
 
     public RateSupplementSearchPK getRateSupplementSearchPK() {
         return rateSupplementSearchPK;
@@ -28,11 +29,11 @@ public class RateSupplementSearch {
         this.close_out = close_out;
     }
 
-    public Float getSupplement() {
+    public BigDecimal getSupplement() {
         return supplement;
     }
 
-    public void setSupplement(Float supplement) {
+    public void setSupplement(BigDecimal supplement) {
         this.supplement = supplement;
     }
 

@@ -1,6 +1,7 @@
 package com.jac.travels.ignite.cache.store;
 
 import com.jac.travels.idclass.GlobalStopSellPK;
+import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.GlobalStopSell;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -17,12 +18,22 @@ public class GlobalStopSellCacheStore extends CacheStoreAdapter<GlobalStopSellPK
 
     @Override
     public GlobalStopSell load(GlobalStopSellPK globalStopSellPK) throws CacheLoaderException {
-        return null;
+        logger.info(">>> Store load [key=" + globalStopSellPK + ']');
+        return queryBuilder.getDataById(GlobalStopSell.class, globalStopSellPK);
     }
 
     @Override
     public void write(Cache.Entry<? extends GlobalStopSellPK, ? extends GlobalStopSell> entry) throws CacheWriterException {
-
+        GlobalStopSellPK key = entry.getKey();
+        GlobalStopSell value = entry.getValue();
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + value + ']');
+            queryBuilder.insertData(value);
+            ProducerUtil.sendMessage("kafkaCacheTopic", value.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", value.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

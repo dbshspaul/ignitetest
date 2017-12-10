@@ -4,6 +4,7 @@ import com.jac.travels.idclass.RateBoardBasisUpgradePK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Table("rate_board_basis_upgrade")
@@ -12,9 +13,9 @@ public class RateBoardBasisUpgrade {
     private RateBoardBasisUpgradePK rateBoardBasisUpgradePK;
     private Integer board_basis_id;
     private Set<Integer> rate_plan_ids;
-    private Float adult_rate;
-    private Float child_rate;
-    private Float youth_rate;
+    private BigDecimal adult_rate;
+    private BigDecimal child_rate;
+    private BigDecimal youth_rate;
 
     public RateBoardBasisUpgradePK getRateBoardBasisUpgradePK() {
         return rateBoardBasisUpgradePK;
@@ -40,27 +41,27 @@ public class RateBoardBasisUpgrade {
         this.rate_plan_ids = rate_plan_ids;
     }
 
-    public Float getAdult_rate() {
+    public BigDecimal getAdult_rate() {
         return adult_rate;
     }
 
-    public void setAdult_rate(Float adult_rate) {
+    public void setAdult_rate(BigDecimal adult_rate) {
         this.adult_rate = adult_rate;
     }
 
-    public Float getChild_rate() {
+    public BigDecimal getChild_rate() {
         return child_rate;
     }
 
-    public void setChild_rate(Float child_rate) {
+    public void setChild_rate(BigDecimal child_rate) {
         this.child_rate = child_rate;
     }
 
-    public Float getYouth_rate() {
+    public BigDecimal getYouth_rate() {
         return youth_rate;
     }
 
-    public void setYouth_rate(Float youth_rate) {
+    public void setYouth_rate(BigDecimal youth_rate) {
         this.youth_rate = youth_rate;
     }
 

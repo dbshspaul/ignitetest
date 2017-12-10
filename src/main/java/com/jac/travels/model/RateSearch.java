@@ -5,16 +5,17 @@ import com.jac.travels.idclass.RateSearchPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Table("rate_search")
 public class RateSearch {
     @PrimaryKey
     private RateSearchPK rateSearchPK;
-    private Float base_rate;
-    private List<Float> bbu_rates;
-    private List<Float> occupant_rates;
-    private Float rate;
+    private BigDecimal base_rate;
+    private List<BigDecimal> bbu_rates;
+    private List<BigDecimal> occupant_rates;
+    private BigDecimal rate;
 
     public RateSearchPK getRateSearchPK() {
         return rateSearchPK;
@@ -24,35 +25,35 @@ public class RateSearch {
         this.rateSearchPK = rateSearchPK;
     }
 
-    public Float getBase_rate() {
+    public BigDecimal getBase_rate() {
         return base_rate;
     }
 
-    public void setBase_rate(Float base_rate) {
+    public void setBase_rate(BigDecimal base_rate) {
         this.base_rate = base_rate;
     }
 
-    public List<Float> getBbu_rates() {
+    public List<BigDecimal> getBbu_rates() {
         return bbu_rates;
     }
 
-    public void setBbu_rates(List<Float> bbu_rates) {
+    public void setBbu_rates(List<BigDecimal> bbu_rates) {
         this.bbu_rates = bbu_rates;
     }
 
-    public List<Float> getOccupant_rates() {
+    public List<BigDecimal> getOccupant_rates() {
         return occupant_rates;
     }
 
-    public void setOccupant_rates(List<Float> occupant_rates) {
+    public void setOccupant_rates(List<BigDecimal> occupant_rates) {
         this.occupant_rates = occupant_rates;
     }
 
-    public Float getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(Float rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 

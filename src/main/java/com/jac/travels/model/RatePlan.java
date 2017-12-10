@@ -5,6 +5,7 @@ import com.jac.travels.idclass.RatePlanPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,9 +36,9 @@ public class RatePlan {
     private Set<Integer> countries;
     private Integer duration_based_pricing_value;
     private Set<Integer> exclusive_to;
-    private Float floating_rate_discount;
+    private BigDecimal floating_rate_discount;
     private Integer follow_on_rate_plan_id;
-    private Float gross_commission;
+    private BigDecimal gross_commission;
     private Boolean has_bbu_inventory_defined;
     private Boolean has_durations_defined;
     private Boolean has_inventory_defined;
@@ -253,11 +254,11 @@ public class RatePlan {
         this.exclusive_to = exclusive_to;
     }
 
-    public Float getFloating_rate_discount() {
+    public BigDecimal getFloating_rate_discount() {
         return floating_rate_discount;
     }
 
-    public void setFloating_rate_discount(Float floating_rate_discount) {
+    public void setFloating_rate_discount(BigDecimal floating_rate_discount) {
         this.floating_rate_discount = floating_rate_discount;
     }
 
@@ -269,11 +270,11 @@ public class RatePlan {
         this.follow_on_rate_plan_id = follow_on_rate_plan_id;
     }
 
-    public Float getGross_commission() {
+    public BigDecimal getGross_commission() {
         return gross_commission;
     }
 
-    public void setGross_commission(Float gross_commission) {
+    public void setGross_commission(BigDecimal gross_commission) {
         this.gross_commission = gross_commission;
     }
 

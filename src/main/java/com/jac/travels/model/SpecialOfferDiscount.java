@@ -5,6 +5,7 @@ import com.jac.travels.idclass.SpecialOfferDiscountPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Table("special_offer_discount")
@@ -13,19 +14,19 @@ public class SpecialOfferDiscount {
     private SpecialOfferDiscountPK specialOfferDiscountPK;
     private Boolean all_adults_free;
     private Boolean all_children_free;
-    private Float discount;
-    private Float discount_adult;
-    private Float discount_child;
-    private Float discount_youth;
+    private BigDecimal discount;
+    private BigDecimal discount_adult;
+    private BigDecimal discount_child;
+    private BigDecimal discount_youth;
     private List<Byte> free_adult_indexes;
     private List<Byte> free_child_indexes;
     private Byte free_nights;
     private Byte max_stay;
     private Byte min_stay;
-    private Float sup_charge_adult;
-    private Float sup_charge_children;
-    private Float sup_charge_room;
-    private Float sup_charge_youth;
+    private BigDecimal sup_charge_adult;
+    private BigDecimal sup_charge_children;
+    private BigDecimal sup_charge_room;
+    private BigDecimal sup_charge_youth;
 
     public SpecialOfferDiscountPK getSpecialOfferDiscountPK() {
         return specialOfferDiscountPK;
@@ -51,35 +52,35 @@ public class SpecialOfferDiscount {
         this.all_children_free = all_children_free;
     }
 
-    public Float getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Float discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 
-    public Float getDiscount_adult() {
+    public BigDecimal getDiscount_adult() {
         return discount_adult;
     }
 
-    public void setDiscount_adult(Float discount_adult) {
+    public void setDiscount_adult(BigDecimal discount_adult) {
         this.discount_adult = discount_adult;
     }
 
-    public Float getDiscount_child() {
+    public BigDecimal getDiscount_child() {
         return discount_child;
     }
 
-    public void setDiscount_child(Float discount_child) {
+    public void setDiscount_child(BigDecimal discount_child) {
         this.discount_child = discount_child;
     }
 
-    public Float getDiscount_youth() {
+    public BigDecimal getDiscount_youth() {
         return discount_youth;
     }
 
-    public void setDiscount_youth(Float discount_youth) {
+    public void setDiscount_youth(BigDecimal discount_youth) {
         this.discount_youth = discount_youth;
     }
 
@@ -123,35 +124,35 @@ public class SpecialOfferDiscount {
         this.min_stay = min_stay;
     }
 
-    public Float getSup_charge_adult() {
+    public BigDecimal getSup_charge_adult() {
         return sup_charge_adult;
     }
 
-    public void setSup_charge_adult(Float sup_charge_adult) {
+    public void setSup_charge_adult(BigDecimal sup_charge_adult) {
         this.sup_charge_adult = sup_charge_adult;
     }
 
-    public Float getSup_charge_children() {
+    public BigDecimal getSup_charge_children() {
         return sup_charge_children;
     }
 
-    public void setSup_charge_children(Float sup_charge_children) {
+    public void setSup_charge_children(BigDecimal sup_charge_children) {
         this.sup_charge_children = sup_charge_children;
     }
 
-    public Float getSup_charge_room() {
+    public BigDecimal getSup_charge_room() {
         return sup_charge_room;
     }
 
-    public void setSup_charge_room(Float sup_charge_room) {
+    public void setSup_charge_room(BigDecimal sup_charge_room) {
         this.sup_charge_room = sup_charge_room;
     }
 
-    public Float getSup_charge_youth() {
+    public BigDecimal getSup_charge_youth() {
         return sup_charge_youth;
     }
 
-    public void setSup_charge_youth(Float sup_charge_youth) {
+    public void setSup_charge_youth(BigDecimal sup_charge_youth) {
         this.sup_charge_youth = sup_charge_youth;
     }
 

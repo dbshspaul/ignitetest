@@ -1,5 +1,6 @@
 package com.jac.travels.ignite.cache.store;
 
+import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.Property;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -17,12 +18,22 @@ public class PropertyCacheStore extends CacheStoreAdapter<Integer, Property> {
 
     @Override
     public Property load(java.lang.Integer integer) throws CacheLoaderException {
-        return null;
+        logger.info(">>> Store load [key=" + integer + ']');
+        return queryBuilder.getDataById(Property.class, integer);
     }
 
     @Override
     public void write(Cache.Entry<? extends java.lang.Integer, ? extends Property> entry) throws CacheWriterException {
-
+        Integer key = entry.getKey();
+        Property value = entry.getValue();
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + value + ']');
+            queryBuilder.insertData(value);
+            ProducerUtil.sendMessage("kafkaCacheTopic", value.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", value.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override

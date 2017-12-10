@@ -1,6 +1,7 @@
 package com.jac.travels.ignite.cache.store;
 
 import com.jac.travels.idclass.RoomPK;
+import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.Room;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -17,12 +18,22 @@ public class RoomCacheStore extends CacheStoreAdapter<RoomPK, Room> {
 
     @Override
     public Room load(RoomPK roomPK) throws CacheLoaderException {
-        return null;
+        logger.info(">>> Store load [key=" + roomPK + ']');
+        return queryBuilder.getDataById(Room.class, roomPK);
     }
 
     @Override
     public void write(Cache.Entry<? extends RoomPK, ? extends Room> entry) throws CacheWriterException {
-
+        RoomPK key = entry.getKey();
+        Room value = entry.getValue();
+        try {
+            logger.info(">>> Store write [key=" + key + ", val=" + value + ']');
+            queryBuilder.insertData(value);
+            ProducerUtil.sendMessage("kafkaCacheTopic", value.toString());
+        } catch (Exception e) {
+            ProducerUtil.sendMessage("kafkaErrorTopic", value.toString());
+            e.printStackTrace();
+        }
     }
 
     @Override
