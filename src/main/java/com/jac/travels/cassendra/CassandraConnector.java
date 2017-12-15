@@ -21,13 +21,13 @@ public class CassandraConnector implements AutoCloseable {
      */
     private Session session;
 
-    private final String node = "52.54.0.20";
-//    private final String node = "localhost";
+//    private final String node = "52.54.0.20";
+    private final String node = "localhost";
     private final int port = 9042;
-    private final String username = "meyvn";
-//    private final String username = "";
-    private final String password = "meyvn01";
-//    private final String password = "";
+//    private final String username = "meyvn";
+    private final String username = "";
+//    private final String password = "meyvn01";
+    private final String password = "";
 
 
     public void connect() {

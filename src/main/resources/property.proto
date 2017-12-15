@@ -1,0 +1,11 @@
+syntax = "proto3";
+package com.jac.travels.protobuf;
+
+message PropertyRequestProto {
+ int32 propertyId = 10;
+ int32 cutOffTime = 20;
+ string name = 30;
+ float starRating = 40;
+ int32 status = 50;
+ string timeZoneId = 60;
+}

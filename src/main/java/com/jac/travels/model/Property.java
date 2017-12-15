@@ -8,12 +8,13 @@ import java.math.BigDecimal;
 @Table("property")
 public class Property {
     @PrimaryKey
-    private	Integer	property_id;
-    private	Integer	cutoff_time;
-    private	String	name;
+    private Integer property_id;
+    private String tenant_id;
+    private Integer cutoff_time;
+    private String name;
     private BigDecimal star_rating;
-    private	Boolean	status;
-    private	String	timezone_id;
+    private Boolean status;
+    private String timezone_id;
 
     public Integer getProperty_id() {
         return property_id;
@@ -61,5 +62,26 @@ public class Property {
 
     public void setTimezone_id(String timezone_id) {
         this.timezone_id = timezone_id;
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Property:{" +
+                "property_id=" + property_id +
+                ", tenant_id=" + tenant_id +
+                ", cutoff_time=" + cutoff_time +
+                ", name='" + name + '\'' +
+                ", star_rating=" + star_rating +
+                ", status=" + status +
+                ", timezone_id='" + timezone_id + '\'' +
+                '}';
     }
 }

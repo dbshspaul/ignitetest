@@ -5,6 +5,7 @@ import com.jac.travels.idclass.RatePK;
 import com.jac.travels.idclass.RoomPK;
 import com.jac.travels.ignite.cache.store.*;
 import com.jac.travels.model.Contract;
+import com.jac.travels.model.Property;
 import com.jac.travels.model.Rate;
 import com.jac.travels.model.Room;
 import org.apache.ignite.Ignite;
@@ -26,24 +27,25 @@ public class IgniteDemo {
     private IgniteCache<RoomPK, Room> roomCache;
     private IgniteCache<ContractPK, Contract> contractCache;
     private IgniteCache<RatePK, Rate> rateCache;
+    private IgniteCache<Integer, Property> propertyCache;
 
     public void startCache() {
-        Ignition.setClientMode(true);
-        IgniteConfiguration cfg = new IgniteConfiguration();
-
-        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
-        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
-        cfg.setDataStorageConfiguration(storageCfg);
-
-        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
-        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
-        tcpDiscoverySpi.setIpFinder(ipFinder);
-        cfg.setDiscoverySpi(tcpDiscoverySpi);
-
-        Ignite ignite = Ignition.start(cfg);
-        ignite.active(true);
-//        Ignite ignite = Ignition.start();
+//        Ignition.setClientMode(true);
+//        IgniteConfiguration cfg = new IgniteConfiguration();
+//
+//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+//        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+//        cfg.setDataStorageConfiguration(storageCfg);
+//
+//        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
+//        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
+//        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
+//        tcpDiscoverySpi.setIpFinder(ipFinder);
+//        cfg.setDiscoverySpi(tcpDiscoverySpi);
+//
+//        Ignite ignite = Ignition.start(cfg);
+//        ignite.active(true);
+        Ignite ignite = Ignition.start();
 
         createCache(ignite, "boardBasisAllocationCacheStore", BoardBasisAllocationCacheStore.class);
         createCache(ignite, "boardBasisAllocationCacheStore", RateCacheStore.class);
@@ -51,7 +53,7 @@ public class IgniteDemo {
         contractCache = createCache(ignite, "contractCacheStore", ContractCacheStore.class);
         createCache(ignite, "globalStopSellCacheStore", GlobalStopSellCacheStore.class);
         createCache(ignite, "propertyAllocationCacheStore", PropertyAllocationCacheStore.class);
-        createCache(ignite, "propertyCacheStore", PropertyCacheStore.class);
+        propertyCache = createCache(ignite, "propertyCacheStore", PropertyCacheStore.class);
         createCache(ignite, "rateBoardBasisUpgradeCacheStore", RateBoardBasisUpgradeCacheStore.class);
         rateCache = createCache(ignite, "roomCacheStore", RateCacheStore.class);
         createCache(ignite, "ratePlanAllocationCacheStore", RatePlanAllocationCacheStore.class);
@@ -90,5 +92,9 @@ public class IgniteDemo {
 
     public IgniteCache<RatePK, Rate> getRateCache() {
         return rateCache;
+    }
+
+    public IgniteCache<Integer, Property> getPropertyCache() {
+        return propertyCache;
     }
 }

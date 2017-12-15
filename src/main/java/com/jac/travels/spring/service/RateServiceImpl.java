@@ -23,6 +23,5 @@ public class RateServiceImpl implements RateService {
     @Override
     public void updateRateByRatePlanId(Rate rate, Integer ratePlanId) {
         rateRepository.save(rate);
-        builder.updateData(rate,"stay_date","rate_plan_id",String.valueOf(ratePlanId));
     }
 }

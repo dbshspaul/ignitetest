@@ -11,6 +11,8 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ignite.test" target="1.8" />
+      <module name="ignite.test (1)" target="1.8" />
+      <module name="ignite.test (2)" target="1.8" />
       <module name="ignitetest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
