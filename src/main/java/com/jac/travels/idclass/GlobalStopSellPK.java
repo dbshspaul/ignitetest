@@ -1,10 +1,17 @@
 package com.jac.travels.idclass;
 
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
+
 import java.util.Objects;
 
 public class GlobalStopSellPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer property_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer contract_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public Integer getProperty_id() {
         return property_id;
@@ -43,5 +50,13 @@ public class GlobalStopSellPK {
                 "property_id=" + property_id +
                 ", contract_id=" + contract_id +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

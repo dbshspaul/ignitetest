@@ -12,6 +12,8 @@ public class RoomPK {
     private Integer room_id;
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer contract_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public Integer getRoom_id() {
         return room_id;
@@ -50,5 +52,13 @@ public class RoomPK {
                 "room_id=" + room_id +
                 ", contract_id=" + contract_id +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

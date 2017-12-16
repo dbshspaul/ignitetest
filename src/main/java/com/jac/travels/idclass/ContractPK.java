@@ -1,9 +1,16 @@
 package com.jac.travels.idclass;
 
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
+
 import java.util.Objects;
 
 public class ContractPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer contract_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer property_id;
 
     public Integer getContract_id() {
@@ -43,5 +50,13 @@ public class ContractPK {
                 "contract_id=" + contract_id +
                 ", property_id=" + property_id +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

@@ -1,12 +1,18 @@
 package com.jac.travels.idclass;
 
 import com.datastax.driver.core.LocalDate;
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.Objects;
 
 public class RoomAllocationPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer room_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private LocalDate stay_date;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public Integer getRoom_id() {
         return room_id;
@@ -45,5 +51,13 @@ public class RoomAllocationPK {
                 "room_id=" + room_id +
                 ", stay_date=" + stay_date +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

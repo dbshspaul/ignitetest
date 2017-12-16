@@ -82,7 +82,7 @@ public class QueryBuilder {
         for (Field field : fieldList) {
             Method method = null;
             try {
-                if (id.getClass().getCanonicalName().startsWith("com.jac.travels.idclass")){
+                if (id.getClass().getCanonicalName().startsWith("com.jac.travels.idclass")) {
                     method = id.getClass().getMethod("get" + field.getName()
                             .replaceFirst(field.getName().substring(0, 1), field.getName()
                                     .substring(0, 1).toUpperCase()));
@@ -98,7 +98,7 @@ public class QueryBuilder {
                     } else {
                         clause += field.getName() + " = " + data + " AND ";
                     }
-                }else {
+                } else {
                     if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
                         clause += field.getName() + " = '" + id + "' AND ";
                     } else {
@@ -163,14 +163,34 @@ public class QueryBuilder {
     public <T> void insertData(T o) {
         try (CassandraConnector client = new CassandraConnector()) {
             client.connect();
-            if (checkTenantID(o,client)) {
+            if (checkTenantID(o, client)) {
                 String query = insertQuery(o);
                 logger.info("Connection to cassandra successful");
                 logger.info("Query: " + query);
                 ResultSet execute = client.getSession().execute(query);
                 logger.info("1 row inserted. " + execute.toString());
-            }else {
+            } else {
                 logger.error("Invalid Tenant ID");
+            }
+        } catch (Exception e) {
+            logger.error("Unable to save data. " + e);
+            e.printStackTrace();
+        }
+    }
+
+    public <T> void insertData(List<T> listO) {
+        try (CassandraConnector client = new CassandraConnector()) {
+            client.connect();
+            for (T o : listO) {
+                if (checkTenantID(o, client)) {
+                    String query = insertQuery(o);
+                    logger.info("Connection to cassandra successful");
+                    logger.info("Query: " + query);
+                    ResultSet execute = client.getSession().execute(query);
+                    logger.info("1 row inserted. " + execute.toString());
+                } else {
+                    logger.error("Invalid Tenant ID");
+                }
             }
         } catch (Exception e) {
             logger.error("Unable to save data. " + e);
@@ -236,40 +256,98 @@ public class QueryBuilder {
         return value;
     }
 
-    public <T> boolean checkTenantID(T o,CassandraConnector client) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public <T, PK> boolean checkTenantID(T o, CassandraConnector client) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> entityClass = o.getClass();
-        String clause = "";
-        String query = "select tenant_id from "+ keyspaceName + "." +entityClass.getSimpleName()+" where ";
         boolean isValidTenant = false;
-        //todo manage for composit key
-        Method getTenantId = entityClass.getMethod("getTenant_id");
-        String tenantId = (String) getTenantId.invoke(o);
-        List<Field> primaryKeyFields = getPrimaryKeyFields(entityClass);
-        for (Field field : primaryKeyFields) {
-            Method method = entityClass.getMethod("get" + field.getName()
-                    .replaceFirst(field.getName().substring(0, 1), field.getName()
-                            .substring(0, 1).toUpperCase()));
-            Object data = method.invoke(o);
-            if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
-                clause += field.getName() + " = '" + data + "' AND ";
-            } else {
-                clause += field.getName() + " = " + data + " AND ";
+        String clause = "";
+        String query = "select tenant_id from " + keyspaceName + "." + entityClass.getSimpleName() + " where ";
+        PK pk = (PK) o;
+        for (Field field : entityClass.getDeclaredFields()) {
+            if (field.isAnnotationPresent(PrimaryKey.class)) {
+                if (field.getType().getCanonicalName().startsWith("com.jac.travels.idclass")) {
+                    Method method = entityClass.getMethod("get" + field.getName()
+                            .replaceFirst(field.getName().substring(0, 1), field.getName()
+                                    .substring(0, 1).toUpperCase()));
+                    pk = (PK) method.invoke(o);
+                }
+                break;
             }
         }
-        query += clause.substring(0, clause.lastIndexOf("AND"))+" ALLOW FILTERING";
-        logger.info("id field where clause=> " + clause);
-            ResultSet resultSet = client.getSession().execute(query);
-            if (resultSet.getAvailableWithoutFetching()!=0) {
-                for (Row row : resultSet) {
-                    if(row.getString("tenant_id").equals(tenantId)){
-                        isValidTenant = true;
-                        break;
-                    }
+        Method getTenantId = pk.getClass().getMethod("getTenant_id");
+        String tenantId = (String) getTenantId.invoke(pk);
+        List<Field> primaryKeyFields = getPrimaryKeyFields(entityClass);
+        for (Field field : primaryKeyFields) {
+            if (!field.getName().equalsIgnoreCase("tenant_id")) {
+                Method method = pk.getClass().getMethod("get" + field.getName()
+                        .replaceFirst(field.getName().substring(0, 1), field.getName()
+                                .substring(0, 1).toUpperCase()));
+                Object data = method.invoke(pk);
+                if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
+                    clause += field.getName() + " = '" + data + "' AND ";
+                } else {
+                    clause += field.getName() + " = " + data + " AND ";
                 }
-            }else {
-                isValidTenant = true;
             }
+        }
+        query += clause.substring(0, clause.lastIndexOf("AND")) + " ALLOW FILTERING";
+        logger.info("Query=>"+query);
+        ResultSet resultSet = client.getSession().execute(query);
+        if (resultSet.getAvailableWithoutFetching() != 0) {
+            for (Row row : resultSet) {
+                if (row.getString("tenant_id").equals(tenantId)) {
+                    isValidTenant = true;
+                    break;
+                }
+            }
+        } else {
+            isValidTenant = true;
+        }
         return isValidTenant;
     }
 
+    public <T,PK>void delete(T o) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> entityClass = o.getClass();
+        String clause = "";
+        String query = "delete from " + keyspaceName + "." + entityClass.getSimpleName() + " where ";
+        PK pk = (PK) o;
+        for (Field field : entityClass.getDeclaredFields()) {
+            if (field.isAnnotationPresent(PrimaryKey.class)) {
+                if (field.getType().getCanonicalName().startsWith("com.jac.travels.idclass")) {
+                    Method method = entityClass.getMethod("get" + field.getName()
+                            .replaceFirst(field.getName().substring(0, 1), field.getName()
+                                    .substring(0, 1).toUpperCase()));
+                    pk = (PK) method.invoke(o);
+                }
+                break;
+            }
+        }
+        List<Field> primaryKeyFields = getPrimaryKeyFields(entityClass);
+        for (Field field : primaryKeyFields) {
+            if (!field.getName().equalsIgnoreCase("tenant_id")) {
+                Method method = pk.getClass().getMethod("get" + field.getName()
+                        .replaceFirst(field.getName().substring(0, 1), field.getName()
+                                .substring(0, 1).toUpperCase()));
+                Object data = method.invoke(pk);
+                if (field.getType().equals(String.class) || field.getType().equals(LocalDate.class)) {
+                    clause += field.getName() + " = '" + data + "' AND ";
+                } else {
+                    clause += field.getName() + " = " + data + " AND ";
+                }
+            }
+        }
+        query += clause.substring(0, clause.lastIndexOf("AND"));
+        logger.info("Delete Query=>"+query);
+        try (CassandraConnector client = new CassandraConnector()) {
+            client.connect();
+            if (checkTenantID(o, client)) {
+                client.getSession().execute(query);
+                logger.error("1 Row deleted successfully.");
+            } else {
+                logger.error("Invalid Tenant ID");
+            }
+        }catch (Exception e){
+            logger.error("Error deleting row in Cassandra. " + e);
+            e.printStackTrace();
+        }
+    }
 }

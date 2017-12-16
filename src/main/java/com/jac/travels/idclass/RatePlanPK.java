@@ -1,10 +1,18 @@
 package com.jac.travels.idclass;
 
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
+
 import java.util.Objects;
 
 public class RatePlanPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer room_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer rate_plan_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
+
 
     public Integer getRoom_id() {
         return room_id;
@@ -43,5 +51,13 @@ public class RatePlanPK {
                 "room_id=" + room_id +
                 ", rate_plan_id=" + rate_plan_id +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

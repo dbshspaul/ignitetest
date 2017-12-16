@@ -13,6 +13,8 @@ public class RatePK {
     private LocalDate stay_date;
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer rate_plan_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public LocalDate getStay_date() {
         return stay_date;
@@ -45,11 +47,20 @@ public class RatePK {
         return Objects.hash(getStay_date(), getRate_plan_id());
     }
 
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
+    }
+
     @Override
     public String toString() {
         return "RatePK:{" +
                 "stay_date=" + stay_date +
                 ", rate_plan_id=" + rate_plan_id +
+                ", tenant_id='" + tenant_id + '\'' +
                 '}';
     }
 }

@@ -2,8 +2,11 @@ package com.jac.travels.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jac.travels.model.Property;
+import com.jac.travels.model.Rate;
+import org.springframework.data.cassandra.mapping.PrimaryKey;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -11,23 +14,10 @@ import java.lang.reflect.InvocationTargetException;
  **/
 public class Test {
     public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        QueryBuilder queryBuilder = new QueryBuilder();
-        ObjectMapper mapper = new ObjectMapper();
-        Property property= null;
-        try {
-            property = mapper.readValue("{\n" +
-                    "    \"property_id\": 37,\n" +
-                    "    \"cutoff_time\": 14,\n" +
-                    "    \"name\": \"Hotel 37\",\n" +
-                    "    \"star_rating\": 4,\n" +
-                    "    \"status\": true,\n" +
-                    "    \"tenant_id\": \"1235p44\",\n" +
-                    "    \"timezone_id\": \"UTC\"\n" +
-                    "}", Property.class);
-        } catch (IOException e) {
-            e.printStackTrace();
+        PrimaryKey annotation = Rate.class.getDeclaredAnnotation(PrimaryKey.class);
+        for (Field field : Rate.class.getDeclaredFields()) {
+            if(field.isAnnotationPresent(PrimaryKey.class))
+            System.out.println(field.getName()+" = " + field.getAnnotation(PrimaryKey.class).value());
         }
-        boolean b = queryBuilder.checkTenantID(property);
-        System.out.println(b);
     }
 }

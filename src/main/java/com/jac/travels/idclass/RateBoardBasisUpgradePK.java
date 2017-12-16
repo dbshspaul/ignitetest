@@ -1,12 +1,18 @@
 package com.jac.travels.idclass;
 
 import com.datastax.driver.core.LocalDate;
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.Objects;
 
 public class RateBoardBasisUpgradePK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer board_basis_upgrade_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private LocalDate stay_date;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public Integer getBoard_basis_upgrade_id() {
         return board_basis_upgrade_id;
@@ -45,5 +51,13 @@ public class RateBoardBasisUpgradePK {
                 "board_basis_upgrade_id=" + board_basis_upgrade_id +
                 ", stay_date=" + stay_date +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

@@ -1,15 +1,24 @@
 package com.jac.travels.idclass;
 
 import com.datastax.driver.core.LocalDate;
+import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.Objects;
 
 public class SpecialOfferDiscountPK {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Integer special_offer_id;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Boolean is_customer;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private LocalDate stay_from;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private LocalDate stay_to;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private Byte day_of_week;
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    private String tenant_id;
 
     public Integer getSpecial_offer_id() {
         return special_offer_id;
@@ -78,5 +87,13 @@ public class SpecialOfferDiscountPK {
                 ", stay_to=" + stay_to +
                 ", day_of_week=" + day_of_week +
                 '}';
+    }
+
+    public String getTenant_id() {
+        return tenant_id;
+    }
+
+    public void setTenant_id(String tenant_id) {
+        this.tenant_id = tenant_id;
     }
 }

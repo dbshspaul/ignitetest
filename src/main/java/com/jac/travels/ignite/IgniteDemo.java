@@ -18,34 +18,33 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 
-import javax.annotation.PostConstruct;
 import javax.cache.configuration.FactoryBuilder;
 import java.util.Arrays;
 
 public class IgniteDemo {
 
-    private IgniteCache<RoomPK, Room> roomCache;
-    private IgniteCache<ContractPK, Contract> contractCache;
-    private IgniteCache<RatePK, Rate> rateCache;
-    private IgniteCache<Integer, Property> propertyCache;
+    private static IgniteCache<RoomPK, Room> roomCache;
+    private static IgniteCache<ContractPK, Contract> contractCache;
+    private static IgniteCache<RatePK, Rate> rateCache;
+    private static IgniteCache<Integer, Property> propertyCache;
 
-    public void startCache() {
-//        Ignition.setClientMode(true);
-//        IgniteConfiguration cfg = new IgniteConfiguration();
-//
-//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
-//        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
-//        cfg.setDataStorageConfiguration(storageCfg);
-//
-//        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
-//        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-//        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
-//        tcpDiscoverySpi.setIpFinder(ipFinder);
-//        cfg.setDiscoverySpi(tcpDiscoverySpi);
-//
-//        Ignite ignite = Ignition.start(cfg);
-//        ignite.active(true);
-        Ignite ignite = Ignition.start();
+    public static void startCache() {
+        Ignition.setClientMode(true);
+        IgniteConfiguration cfg = new IgniteConfiguration();
+
+        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+        cfg.setDataStorageConfiguration(storageCfg);
+
+        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
+        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
+        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
+        tcpDiscoverySpi.setIpFinder(ipFinder);
+        cfg.setDiscoverySpi(tcpDiscoverySpi);
+
+        Ignite ignite = Ignition.start(cfg);
+        ignite.active(true);
+//        Ignite ignite = Ignition.start();
 
         createCache(ignite, "boardBasisAllocationCacheStore", BoardBasisAllocationCacheStore.class);
         createCache(ignite, "boardBasisAllocationCacheStore", RateCacheStore.class);
@@ -69,7 +68,7 @@ public class IgniteDemo {
 
     }
 
-    private IgniteCache createCache(Ignite ignite, String cacheName, Class clazz) {
+    private static IgniteCache createCache(Ignite ignite, String cacheName, Class clazz) {
         CacheConfiguration contractCacheConfig = new CacheConfiguration();
         contractCacheConfig.setName(cacheName);
         contractCacheConfig.setReadThrough(true);
@@ -96,5 +95,10 @@ public class IgniteDemo {
 
     public IgniteCache<Integer, Property> getPropertyCache() {
         return propertyCache;
+    }
+
+    public static void main(String[] args) {
+        startCache();
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>working");
     }
 }
