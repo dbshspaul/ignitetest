@@ -1,6 +1,7 @@
 package com.jac.travels.ignite;
 
 import com.jac.travels.idclass.ContractPK;
+import com.jac.travels.idclass.PropertyPK;
 import com.jac.travels.idclass.RatePK;
 import com.jac.travels.idclass.RoomPK;
 import com.jac.travels.ignite.cache.store.*;
@@ -21,12 +22,12 @@ import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMultic
 import javax.cache.configuration.FactoryBuilder;
 import java.util.Arrays;
 
-public class IgniteDemo {
+public class IgniteClientNode {
 
     private static IgniteCache<RoomPK, Room> roomCache;
     private static IgniteCache<ContractPK, Contract> contractCache;
     private static IgniteCache<RatePK, Rate> rateCache;
-    private static IgniteCache<Integer, Property> propertyCache;
+    private static IgniteCache<PropertyPK, Property> propertyCache;
 
     public static void startCache() {
         Ignition.setClientMode(true);
@@ -93,7 +94,7 @@ public class IgniteDemo {
         return rateCache;
     }
 
-    public IgniteCache<Integer, Property> getPropertyCache() {
+    public IgniteCache<PropertyPK, Property> getPropertyCache() {
         return propertyCache;
     }
 

@@ -13,9 +13,9 @@ public class Contract {
     private LocalDate booking_to;
     private String buying_currency;
     private Integer channel_manager_id;
-    private Integer channel_type_id;
-    private Integer contract_status_id;
-    private Integer contract_type_id;
+    private Byte channel_type_id;
+    private Short contract_status_id;
+    private Byte contract_type_id;
     private Integer follow_on_contract_id;
     private Boolean no_end_dates;
     private LocalDate stay_from;
@@ -61,27 +61,19 @@ public class Contract {
         this.channel_manager_id = channel_manager_id;
     }
 
-    public Integer getChannel_type_id() {
-        return channel_type_id;
-    }
-
-    public void setChannel_type_id(Integer channel_type_id) {
-        this.channel_type_id = channel_type_id;
-    }
-
-    public Integer getContract_status_id() {
+    public Short getContract_status_id() {
         return contract_status_id;
     }
 
-    public void setContract_status_id(Integer contract_status_id) {
+    public void setContract_status_id(Short contract_status_id) {
         this.contract_status_id = contract_status_id;
     }
 
-    public Integer getContract_type_id() {
+    public Byte getContract_type_id() {
         return contract_type_id;
     }
 
-    public void setContract_type_id(Integer contract_type_id) {
+    public void setContract_type_id(Byte contract_type_id) {
         this.contract_type_id = contract_type_id;
     }
 
@@ -115,6 +107,14 @@ public class Contract {
 
     public void setStay_to(LocalDate stay_to) {
         this.stay_to = stay_to;
+    }
+
+    public Byte getChannel_type_id() {
+        return channel_type_id;
+    }
+
+    public void setChannel_type_id(Byte channel_type_id) {
+        this.channel_type_id = channel_type_id;
     }
 
     @Override

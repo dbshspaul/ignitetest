@@ -3,6 +3,7 @@ package com.jac.travels.spring.controller;
 import com.googlecode.protobuf.format.JsonFormat;
 import com.jac.travels.protobuf.Property;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -10,6 +11,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import static org.junit.Assert.*;
 
@@ -23,13 +25,12 @@ public class ControllerTest {
         InputStream responseStream = null;
         String jsonOutput = null;
         try {
-            responseStream = executeHttpRequest("http://localhost:8080/property/1");
+            responseStream = executeHttpRequest("http://localhost:8080/property/1?tenant_id=45a");
             jsonOutput = convertProtobufMessageStreamToJsonString(responseStream);
+            System.out.println(jsonOutput);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertEquals("{\"propertyId\": 1,\"cutOffTime\": 14,\"name\": \"Hotel 37\",\"starRating\": 4.0,\"status\": 1}",
-                jsonOutput);
     }
 
     private InputStream executeHttpRequest(String url) throws IOException {
@@ -43,5 +44,34 @@ public class ControllerTest {
         JsonFormat jsonFormat = new JsonFormat();
         Property.PropertyRequestProto propertyRequestProto = Property.PropertyRequestProto.parseFrom(protobufStream);
         return jsonFormat.printToString(propertyRequestProto);
+    }
+
+    @Test
+    public void getContractById() {
+        InputStream responseStream = null;
+        String jsonOutput = null;
+        try {
+            responseStream = executeHttpRequest("http://localhost:8080/contract/5?tenant_id=AC40&property_id=9");
+            jsonOutput = convertProtobufMessageStreamToJsonString(responseStream);
+            System.out.println(jsonOutput);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void deleteContractById() {
+        try {
+            CloseableHttpClient httpClient = HttpClients.createDefault();
+            HttpDelete request = new HttpDelete("http://localhost:8080/contract/2?tenant_id=AC40&property_id=5");
+            HttpResponse httpResponse = httpClient.execute(request);
+            InputStream responseStream= httpResponse.getEntity().getContent();
+            byte[] buff = new byte[responseStream.available()];
+            responseStream.read(buff);
+            System.out.println(new String(buff));
+            responseStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

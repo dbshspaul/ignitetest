@@ -257,7 +257,7 @@ public class QueryBuilderTest {
         boolean b=false;
         try (CassandraConnector client = new CassandraConnector()) {
             client.connect();
-            b = queryBuilder.checkTenantID(property,client);
+            b = queryBuilder.checkTenantID(property,client,Property.class);
         }catch (Exception e){
 
         }
@@ -278,7 +278,7 @@ public class QueryBuilderTest {
                     "    \"tenant_id\": \"123pok4400\",\n" +
                     "    \"timezone_id\": \"UTC\"\n" +
                     "}", Property.class);
-            queryBuilder.delete(property);
+            queryBuilder.delete(property,Property.class);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {

@@ -3,6 +3,7 @@ package com.jac.travels.ignite.cache.store;
 import com.jac.travels.idclass.ContractPK;
 import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.Contract;
+import com.jac.travels.model.Property;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
 import javax.cache.integration.CacheWriterException;
+import java.lang.reflect.InvocationTargetException;
 
 public class ContractCacheStore extends CacheStoreAdapter<ContractPK, Contract> {
     Logger logger = LoggerFactory.getLogger(ContractCacheStore.class);
@@ -38,6 +40,15 @@ public class ContractCacheStore extends CacheStoreAdapter<ContractPK, Contract> 
 
     @Override
     public void delete(Object o) throws CacheWriterException {
-
+        try {
+            queryBuilder.delete(o,Contract.class);
+            logger.info("<<< Contract Successfully deleted.");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

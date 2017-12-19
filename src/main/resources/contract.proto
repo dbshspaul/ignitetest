@@ -1,0 +1,18 @@
+syntax = "proto3";
+package com.jac.travels.protobuf;
+
+message ContractRequestProto {
+    int32 propertyId = 10;
+    int32 contractId = 20;
+    string bookingFrom= 30;
+    string booking_to= 40;
+    string buying_currency= 50;
+    int32 channel_manager_id = 60;
+    int32 channel_type_id = 70;
+    int32 contract_status_id = 80;
+    int32 contract_type_id = 90;
+    int32 follow_on_contract_id = 100;
+    int32 no_end_dates = 110;
+    string stay_from = 120;
+    string stay_to = 130;
+}
