@@ -1,10 +1,15 @@
 package com.jac.travels.spring.controller;
 
+import com.datastax.driver.core.LocalDate;
 import com.jac.travels.idclass.ContractPK;
 import com.jac.travels.idclass.PropertyPK;
+import com.jac.travels.idclass.RatePK;
+import com.jac.travels.idclass.RoomPK;
 import com.jac.travels.ignite.IgniteClientNode;
 import com.jac.travels.model.Contract;
 import com.jac.travels.model.Property;
+import com.jac.travels.model.Rate;
+import com.jac.travels.model.Room;
 import org.apache.ignite.IgniteCache;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,7 +115,7 @@ public class Controller {
         contractPK.setProperty_id(propertyId);
         contractPK.setContract_id(contractId);
         contractPK.setTenant_id(tenantId);
-        Contract contract= contractCache.get(contractPK);
+        Contract contract = contractCache.get(contractPK);
         ResponseEntity entity = null;
         if (contract != null) {
             com.jac.travels.protobuf.Contract.ContractRequestProto contractRequestProto = com.jac.travels.protobuf.Contract.ContractRequestProto.newBuilder()
@@ -124,7 +129,7 @@ public class Controller {
                     .setContractStatusId(contract.getContract_status_id())
                     .setContractTypeId(contract.getContract_type_id())
                     .setFollowOnContractId(contract.getFollow_on_contract_id())
-                    .setNoEndDates(contract.getNo_end_dates()?1:0)
+                    .setNoEndDates(contract.getNo_end_dates() ? 1 : 0)
                     .setStayFrom(contract.getStay_from().toString())
                     .setStayTo(contract.getStay_to().toString())
                     .build();
@@ -139,8 +144,8 @@ public class Controller {
     @DeleteMapping(value = "/contract/{contractId}")
     @ResponseBody
     public ResponseEntity deleteContractById(@PathVariable(value = "contractId") Integer contractId,
-                                          @RequestParam(value = "tenant_id") String tenantId,
-                                          @RequestParam(value = "property_id") Integer propertyId) {
+                                             @RequestParam(value = "tenant_id") String tenantId,
+                                             @RequestParam(value = "property_id") Integer propertyId) {
         IgniteCache<ContractPK, Contract> contractCache = igniteClientNode.getContractCache();
         ContractPK contractPK = new ContractPK();
         contractPK.setProperty_id(propertyId);
@@ -150,7 +155,109 @@ public class Controller {
         return new ResponseEntity(new StringBuilder("Successfully deleted."), HttpStatus.CREATED);
     }
 
+    //////////////////////////////////////rate/////////////////////////////////////////////////
+    @PostMapping("/rate")
+    @ResponseBody
+    public ResponseEntity rateByStayDate(@RequestParam(name = "rate") Rate rate) {
+        try {
+            IgniteCache<RatePK, Rate> rateIgniteCache = igniteClientNode.getRateCache();
+            rateIgniteCache.put(rate.getRatePK(), rate);
+            return new ResponseEntity(new StringBuilder("Successfully created"), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
 
+    @GetMapping("/rate/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity getRateById(@PathVariable(name = "ratePlanId") Integer ratePlanId, @RequestParam(name = "stayDate") LocalDate stayDate, @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePK, Rate> rateIgniteCache = igniteClientNode.getRateCache();
+            RatePK ratePK = new RatePK();
+            ratePK.setRate_plan_id(ratePlanId);
+            ratePK.setStay_date(stayDate);
+            ratePK.setTenant_id(tenantId);
+            Rate rate = rateIgniteCache.get(ratePK);
+            if (rate != null) {
+                return new ResponseEntity(rate, HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/rate/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity deleteRateById(@PathVariable(name = "ratePlanId") Integer ratePlanId, @RequestParam(name = "stayDate") LocalDate stayDate, @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePK, Rate> rateIgniteCache = igniteClientNode.getRateCache();
+            RatePK ratePK = new RatePK();
+            ratePK.setRate_plan_id(ratePlanId);
+            ratePK.setStay_date(stayDate);
+            ratePK.setTenant_id(tenantId);
+            rateIgniteCache.remove(ratePK);
+            return new ResponseEntity(new StringBuilder("Rate Successfully Deleted."), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    //////////////////////////////////////room/////////////////////////////////////////////////
+    @PostMapping("/room")
+    @ResponseBody
+    public ResponseEntity insertRoom(@RequestParam(name = "room") Room room) {
+        try {
+            IgniteCache<RoomPK, Room> roomCache = igniteClientNode.getRoomCache();
+            roomCache.put(room.getRoomPK(), room);
+            return new ResponseEntity(new StringBuilder("Successfully created"), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @GetMapping("/room/{roomId}")
+    @ResponseBody
+    public ResponseEntity getRateById(@PathVariable(name = "roomId") Integer roomId,
+                                      @RequestParam(name = "contractId") Integer contractId,
+                                      @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RoomPK, Room> roomCache = igniteClientNode.getRoomCache();
+            RoomPK roomPK = new RoomPK();
+            roomPK.setRoom_id(roomId);
+            roomPK.setContract_id(contractId);
+            roomPK.setTenant_id(tenantId);
+            Room room = roomCache.get(roomPK);
+            if (room != null) {
+                return new ResponseEntity(room, HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/room/{roomId}")
+    @ResponseBody
+    public ResponseEntity deleteRateById(@PathVariable(name = "roomId") Integer roomId,
+                                         @RequestParam(name = "contractId") Integer contractId,
+                                         @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RoomPK, Room> roomCache = igniteClientNode.getRoomCache();
+            RoomPK roomPK = new RoomPK();
+            roomPK.setRoom_id(roomId);
+            roomPK.setContract_id(contractId);
+            roomPK.setTenant_id(tenantId);
+            roomCache.remove(roomPK);
+            return new ResponseEntity(new StringBuilder("Room Successfully Deleted."), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @NotNull
     private ResponseEntity getErrorResponseEntity(Exception e) {
         Map<String, String> response = new HashMap<>();

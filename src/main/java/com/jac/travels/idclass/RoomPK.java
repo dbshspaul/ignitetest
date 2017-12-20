@@ -37,13 +37,13 @@ public class RoomPK {
         if (!(o instanceof RoomPK)) return false;
         RoomPK roomPK = (RoomPK) o;
         return Objects.equals(getRoom_id(), roomPK.getRoom_id()) &&
-                Objects.equals(getContract_id(), roomPK.getContract_id());
+                Objects.equals(getContract_id(), roomPK.getContract_id()) &&
+                Objects.equals(getTenant_id(), roomPK.getTenant_id());
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getRoom_id(), getContract_id());
+        return Objects.hash(getRoom_id(), getContract_id(), getTenant_id());
     }
 
     @Override

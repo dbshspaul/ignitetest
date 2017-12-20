@@ -38,13 +38,14 @@ public class RatePK {
         if (!(o instanceof RatePK)) return false;
         RatePK ratePK = (RatePK) o;
         return Objects.equals(getStay_date(), ratePK.getStay_date()) &&
-                Objects.equals(getRate_plan_id(), ratePK.getRate_plan_id());
+                Objects.equals(getRate_plan_id(), ratePK.getRate_plan_id()) &&
+                Objects.equals(getTenant_id(), ratePK.getTenant_id());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getStay_date(), getRate_plan_id());
+        return Objects.hash(getStay_date(), getRate_plan_id(), getTenant_id());
     }
 
     public String getTenant_id() {

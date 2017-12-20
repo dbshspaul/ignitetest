@@ -1,10 +1,12 @@
 package com.jac.travels.idclass;
 
 import org.springframework.cassandra.core.PrimaryKeyType;
+import org.springframework.data.cassandra.mapping.PrimaryKeyClass;
 import org.springframework.data.cassandra.mapping.PrimaryKeyColumn;
 
 import java.util.Objects;
 
+@PrimaryKeyClass
 public class ContractPK {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private String tenant_id;
@@ -34,14 +36,15 @@ public class ContractPK {
         if (this == o) return true;
         if (!(o instanceof ContractPK)) return false;
         ContractPK that = (ContractPK) o;
-        return Objects.equals(getContract_id(), that.getContract_id()) &&
+        return Objects.equals(getTenant_id(), that.getTenant_id()) &&
+                Objects.equals(getContract_id(), that.getContract_id()) &&
                 Objects.equals(getProperty_id(), that.getProperty_id());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getContract_id(), getProperty_id());
+        return Objects.hash(getTenant_id(), getContract_id(), getProperty_id());
     }
 
     @Override

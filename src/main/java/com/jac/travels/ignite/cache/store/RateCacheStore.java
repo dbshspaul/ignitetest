@@ -2,6 +2,7 @@ package com.jac.travels.ignite.cache.store;
 
 import com.jac.travels.idclass.RatePK;
 import com.jac.travels.kafka.ProducerUtil;
+import com.jac.travels.model.Contract;
 import com.jac.travels.model.Rate;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.cache.Cache;
 import javax.cache.integration.CacheLoaderException;
 import javax.cache.integration.CacheWriterException;
+import java.lang.reflect.InvocationTargetException;
 
 public class RateCacheStore extends CacheStoreAdapter<RatePK, Rate> {
     Logger logger = LoggerFactory.getLogger(RateCacheStore.class);
@@ -38,6 +40,15 @@ public class RateCacheStore extends CacheStoreAdapter<RatePK, Rate> {
 
     @Override
     public void delete(Object o) throws CacheWriterException {
-
+        try {
+            queryBuilder.delete(o,Rate.class);
+            logger.info("<<< Rate Successfully deleted.");
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

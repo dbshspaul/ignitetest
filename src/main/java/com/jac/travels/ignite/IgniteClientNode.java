@@ -30,42 +30,27 @@ public class IgniteClientNode {
     private static IgniteCache<PropertyPK, Property> propertyCache;
 
     public static void startCache() {
-        Ignition.setClientMode(true);
-        IgniteConfiguration cfg = new IgniteConfiguration();
+//        Ignition.setClientMode(true);
+//        IgniteConfiguration cfg = new IgniteConfiguration();
+//
+//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
+//        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
+//        cfg.setDataStorageConfiguration(storageCfg);
+//
+//        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
+//        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
+//        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
+//        tcpDiscoverySpi.setIpFinder(ipFinder);
+//        cfg.setDiscoverySpi(tcpDiscoverySpi);
+//
+//        Ignite ignite = Ignition.start(cfg);
+//        ignite.active(true);
+        Ignite ignite = Ignition.start();
 
-        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
-        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
-        cfg.setDataStorageConfiguration(storageCfg);
-
-        TcpDiscoverySpi tcpDiscoverySpi = new TcpDiscoverySpi();
-        TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-        ipFinder.setAddresses(Arrays.asList("127.0.0.1:47500..47502"));
-        tcpDiscoverySpi.setIpFinder(ipFinder);
-        cfg.setDiscoverySpi(tcpDiscoverySpi);
-
-        Ignite ignite = Ignition.start(cfg);
-        ignite.active(true);
-//        Ignite ignite = Ignition.start();
-
-        createCache(ignite, "boardBasisAllocationCacheStore", BoardBasisAllocationCacheStore.class);
-        createCache(ignite, "boardBasisAllocationCacheStore", RateCacheStore.class);
-        createCache(ignite, "contractAllocationCacheStore", ContractAllocationCacheStore.class);
+        rateCache = createCache(ignite, "boardBasisAllocationCacheStore", RateCacheStore.class);
         contractCache = createCache(ignite, "contractCacheStore", ContractCacheStore.class);
-        createCache(ignite, "globalStopSellCacheStore", GlobalStopSellCacheStore.class);
-        createCache(ignite, "propertyAllocationCacheStore", PropertyAllocationCacheStore.class);
         propertyCache = createCache(ignite, "propertyCacheStore", PropertyCacheStore.class);
-        createCache(ignite, "rateBoardBasisUpgradeCacheStore", RateBoardBasisUpgradeCacheStore.class);
-        rateCache = createCache(ignite, "roomCacheStore", RateCacheStore.class);
-        createCache(ignite, "ratePlanAllocationCacheStore", RatePlanAllocationCacheStore.class);
-        createCache(ignite, "ratePlanCacheStore", RatePlanCacheStore.class);
-        createCache(ignite, "rateSearchCacheStore", RateSearchCacheStore.class);
-        createCache(ignite, "rateSupplementCacheStore", RateSupplementCacheStore.class);
-        createCache(ignite, "rateSupplementSearchCacheStore", RateSupplementSearchCacheStore.class);
-        createCache(ignite, "roomAllocationCacheStore", RoomAllocationCacheStore.class);
         roomCache = createCache(ignite, "roomCacheStore", RoomCacheStore.class);
-        createCache(ignite, "specialOfferCacheStore", SpecialOfferCacheStore.class);
-        createCache(ignite, "specialOfferDiscountCacheStore", SpecialOfferDiscountCacheStore.class);
-        createCache(ignite, "supplementCacheStore", SupplementCacheStore.class);
 
     }
 

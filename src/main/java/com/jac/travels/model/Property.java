@@ -1,6 +1,5 @@
 package com.jac.travels.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jac.travels.idclass.PropertyPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;

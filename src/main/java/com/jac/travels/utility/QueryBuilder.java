@@ -336,7 +336,7 @@ public class QueryBuilder {
             client.connect();
             //if (checkTenantID(o, client, clazz)) {
                 client.getSession().execute(query);
-                logger.error("1 Row deleted successfully.");
+                logger.warn("1 Row deleted successfully.");
 //            } else {
 //                logger.error("Invalid Tenant ID");
 //            }
