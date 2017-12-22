@@ -1,35 +1,26 @@
 package com.jac.travels.ignite;
 
-import com.jac.travels.idclass.ContractPK;
-import com.jac.travels.idclass.PropertyPK;
-import com.jac.travels.idclass.RatePK;
-import com.jac.travels.idclass.RoomPK;
+import com.jac.travels.idclass.*;
 import com.jac.travels.ignite.cache.store.*;
-import com.jac.travels.model.Contract;
-import com.jac.travels.model.Property;
-import com.jac.travels.model.Rate;
-import com.jac.travels.model.Room;
+import com.jac.travels.model.*;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.CacheMode;
 import org.apache.ignite.configuration.CacheConfiguration;
-import org.apache.ignite.configuration.DataStorageConfiguration;
-import org.apache.ignite.configuration.IgniteConfiguration;
-import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
-import org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder;
 
 import javax.cache.configuration.FactoryBuilder;
-import java.util.Arrays;
 
 public class IgniteClientNode {
 
-    private static IgniteCache<RoomPK, Room> roomCache;
-    private static IgniteCache<ContractPK, Contract> contractCache;
-    private static IgniteCache<RatePK, Rate> rateCache;
-    private static IgniteCache<PropertyPK, Property> propertyCache;
+    private IgniteCache<RoomPK, Room> roomCache;
+    private IgniteCache<ContractPK, Contract> contractCache;
+    private IgniteCache<RatePK, Rate> rateCache;
+    private IgniteCache<PropertyPK, Property> propertyCache;
+    private IgniteCache<RatePlanPK, RatePlan> ratePlanIgniteCache;
+    private IgniteCache<RatePlanAllocationPK, RatePlanAllocation> ratePlanAllocationIgniteCache;
 
-    public static void startCache() {
+    public void startCache() {
 //        Ignition.setClientMode(true);
 //        IgniteConfiguration cfg = new IgniteConfiguration();
 //
@@ -51,6 +42,8 @@ public class IgniteClientNode {
         contractCache = createCache(ignite, "contractCacheStore", ContractCacheStore.class);
         propertyCache = createCache(ignite, "propertyCacheStore", PropertyCacheStore.class);
         roomCache = createCache(ignite, "roomCacheStore", RoomCacheStore.class);
+        ratePlanIgniteCache = createCache(ignite, "ratePlanCacheStore", RatePlanCacheStore.class);
+        ratePlanAllocationIgniteCache = createCache(ignite, "ratePlanAllocationCacheStore", RatePlanAllocationCacheStore.class);
 
     }
 
@@ -65,6 +58,10 @@ public class IgniteClientNode {
 //        contractCacheConfig.setIndexedTypes(Integer.class, Contract.class);
         contractCacheConfig.setCacheStoreFactory(FactoryBuilder.factoryOf(clazz));
         return ignite.getOrCreateCache(contractCacheConfig);
+    }
+
+    public IgniteCache<RatePlanPK, RatePlan> getRatePlanIgniteCache() {
+        return ratePlanIgniteCache;
     }
 
     public IgniteCache<RoomPK, Room> getRoomCache() {
@@ -83,8 +80,7 @@ public class IgniteClientNode {
         return propertyCache;
     }
 
-    public static void main(String[] args) {
-        startCache();
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>working");
+    public IgniteCache<RatePlanAllocationPK, RatePlanAllocation> getRatePlanAllocationIgniteCache() {
+        return ratePlanAllocationIgniteCache;
     }
 }

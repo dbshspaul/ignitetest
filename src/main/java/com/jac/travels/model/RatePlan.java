@@ -1,6 +1,7 @@
 package com.jac.travels.model;
 
 import com.datastax.driver.core.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jac.travels.idclass.RatePlanPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;

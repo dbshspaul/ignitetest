@@ -3,9 +3,8 @@ package com.jac.travels.utility;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jac.travels.cassendra.CassandraConnector;
-import com.jac.travels.model.Property;
-import com.jac.travels.model.Rate;
-import com.jac.travels.model.Room;
+import com.jac.travels.ignite.TestIgnite;
+import com.jac.travels.model.*;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -288,5 +287,12 @@ public class QueryBuilderTest {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void getTableName(){
+        assertEquals("rate",queryBuilder.getTableName(Rate.class));
+        assertEquals("rate_plan",queryBuilder.getTableName(RatePlan.class));
+        assertEquals("rate_plan_allocation",queryBuilder.getTableName(RatePlanAllocation.class));
     }
 }

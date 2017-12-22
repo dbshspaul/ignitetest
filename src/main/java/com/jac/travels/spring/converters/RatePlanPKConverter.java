@@ -1,24 +1,27 @@
 package com.jac.travels.spring.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jac.travels.model.RatePlan;
+import com.jac.travels.idclass.RatePlanPK;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+/**
+ * created by My System on 21-Dec-17
+ **/
 @Component
-public class RatePlanConverter implements Converter<String, RatePlan> {
+public class RatePlanPKConverter implements Converter<String, RatePlanPK> {
 
     @Override
-    public RatePlan convert(String s) {
+    public RatePlanPK convert(String s) {
         ObjectMapper mapper = new ObjectMapper();
-        RatePlan ratePlan = null;
+        RatePlanPK ratePlanPK = null;
         try {
-            ratePlan = mapper.readValue(s, RatePlan.class);
+            ratePlanPK = mapper.readValue(s, RatePlanPK.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ratePlan;
+        return ratePlanPK;
     }
 }

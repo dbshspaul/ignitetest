@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
+import org.springframework.data.cassandra.mapping.Table;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -50,7 +51,7 @@ public class QueryBuilder {
         List<Field> primaryKeyFields = getPrimaryKeyFields(c);
         query += primaryKeyFields.stream().map(item -> item.getName()).collect(Collectors.joining(", ")) + ", ";
         query += Arrays.stream(c.getDeclaredFields()).filter(item -> !(primaryKeyFields.contains(item) || item.getType().getCanonicalName().startsWith("com.jac.travels.idclass"))).map(item -> item.getName()).collect(Collectors.joining(", "));
-        query += " from " + keyspaceName + "." + tableName;
+        query += " from " + keyspaceName + "." + getTableName(c);
         return query;
     }
 
@@ -201,7 +202,7 @@ public class QueryBuilder {
     private <T, PK> String insertQuery(T o) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class c = o.getClass();
         String tableName = c.getSimpleName();
-        String query = "insert into " + keyspaceName + "." + tableName + "(";
+        String query = "insert into " + keyspaceName + "." + getTableName(c) + "(";
         String value = "";
         for (Field field : c.getDeclaredFields()) {
             if (field.getType().getCanonicalName().startsWith("com.jac.travels.idclass")) {
@@ -259,7 +260,7 @@ public class QueryBuilder {
     public <T, PK> boolean checkTenantID(T o, CassandraConnector client, Class entityClass) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         boolean isValidTenant = false;
         String clause = "";
-        String query = "select tenant_id from " + keyspaceName + "." + entityClass.getSimpleName() + " where ";
+        String query = "select tenant_id from " + keyspaceName + "." + getTableName(entityClass) + " where ";
         PK pk = (PK) o;
         for (Field field : entityClass.getDeclaredFields()) {
             if (field.isAnnotationPresent(PrimaryKey.class)) {
@@ -289,7 +290,7 @@ public class QueryBuilder {
             }
         }
         query += clause.substring(0, clause.lastIndexOf("AND")) + " ALLOW FILTERING";
-        logger.info("Query=>"+query);
+        logger.info("Query=>" + query);
         ResultSet resultSet = client.getSession().execute(query);
         if (resultSet.getAvailableWithoutFetching() != 0) {
             for (Row row : resultSet) {
@@ -304,9 +305,9 @@ public class QueryBuilder {
         return isValidTenant;
     }
 
-    public <T,PK>void delete(T o, Class clazz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public <T, PK> void delete(T o, Class clazz) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String clause = "";
-        String query = "delete from " + keyspaceName + "." + clazz.getSimpleName() + " where ";
+        String query = "delete from " + keyspaceName + "." + getTableName(clazz) + " where ";
         PK pk = (PK) o;
         List<Field> primaryKeyFields = getPrimaryKeyFields(clazz);
         for (Field field : primaryKeyFields) {
@@ -331,18 +332,32 @@ public class QueryBuilder {
             }
         }
         query += clause.substring(0, clause.lastIndexOf("AND"));
-        logger.info("Delete Query=>"+query);
+        logger.info("Delete Query=>" + query);
         try (CassandraConnector client = new CassandraConnector()) {
             client.connect();
             //if (checkTenantID(o, client, clazz)) {
-                client.getSession().execute(query);
-                logger.warn("1 Row deleted successfully.");
+            client.getSession().execute(query);
+            logger.warn("1 Row deleted successfully.");
 //            } else {
 //                logger.error("Invalid Tenant ID");
 //            }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("Error deleting row in Cassandra. " + e);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @param entityClass
+     * @return
+     */
+    public String getTableName(Class entityClass) {
+        String name = entityClass.getSimpleName();
+        Annotation annotation = entityClass.getAnnotation(Table.class);
+        if (annotation!=null) {
+            Table table = (Table) annotation;
+            name = table.value();
+        }
+        return name;
     }
 }

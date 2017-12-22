@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 public class TestIgnite {
     Logger logger = LoggerFactory.getLogger(TestIgnite.class);
-//    IgniteCache<RatePK, Rate> rateIgniteCache = IgniteDemo.getInstance().getRateCache();
+//    IgniteCache<RatePK, Rate> rateIgniteCache = IgniteClientNode.getInstance().getRateCache();
     IgniteCache<RatePK, Rate> rateIgniteCache = null;
 
     public void insertData(int dayInEpoch){

@@ -5,7 +5,7 @@ import com.jac.travels.idclass.RatePlanAllocationPK;
 import org.springframework.data.cassandra.mapping.PrimaryKey;
 import org.springframework.data.cassandra.mapping.Table;
 
-import java.time.ZonedDateTime;
+import java.util.Date;
 
 @Table("rate_plan_allocation")
 public class RatePlanAllocation {
@@ -27,8 +27,8 @@ public class RatePlanAllocation {
     private Integer split_release_allocation;
     private Integer split_release_sold;
     private Integer total_sold;
-    private ZonedDateTime utc_release_date_time;
-    private ZonedDateTime utc_split_release_date_time;
+    private Date utc_release_date_time;
+    private Date utc_split_release_date_time;
 
     public RatePlanAllocationPK getRatePlanAllocationPK() {
         return ratePlanAllocationPK;
@@ -166,19 +166,19 @@ public class RatePlanAllocation {
         this.total_sold = total_sold;
     }
 
-    public ZonedDateTime getUtc_release_date_time() {
+    public Date getUtc_release_date_time() {
         return utc_release_date_time;
     }
 
-    public void setUtc_release_date_time(ZonedDateTime utc_release_date_time) {
+    public void setUtc_release_date_time(Date utc_release_date_time) {
         this.utc_release_date_time = utc_release_date_time;
     }
 
-    public ZonedDateTime getUtc_split_release_date_time() {
+    public Date getUtc_split_release_date_time() {
         return utc_split_release_date_time;
     }
 
-    public void setUtc_split_release_date_time(ZonedDateTime utc_split_release_date_time) {
+    public void setUtc_split_release_date_time(Date utc_split_release_date_time) {
         this.utc_split_release_date_time = utc_split_release_date_time;
     }
 

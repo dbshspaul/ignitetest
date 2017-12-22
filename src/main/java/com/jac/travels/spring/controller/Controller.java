@@ -1,15 +1,9 @@
 package com.jac.travels.spring.controller;
 
 import com.datastax.driver.core.LocalDate;
-import com.jac.travels.idclass.ContractPK;
-import com.jac.travels.idclass.PropertyPK;
-import com.jac.travels.idclass.RatePK;
-import com.jac.travels.idclass.RoomPK;
+import com.jac.travels.idclass.*;
 import com.jac.travels.ignite.IgniteClientNode;
-import com.jac.travels.model.Contract;
-import com.jac.travels.model.Property;
-import com.jac.travels.model.Rate;
-import com.jac.travels.model.Room;
+import com.jac.travels.model.*;
 import org.apache.ignite.IgniteCache;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,11 +245,120 @@ public class Controller {
             roomPK.setContract_id(contractId);
             roomPK.setTenant_id(tenantId);
             roomCache.remove(roomPK);
-            return new ResponseEntity(new StringBuilder("Room Successfully Deleted."), HttpStatus.NOT_FOUND);
+            return new ResponseEntity(new StringBuilder("Room Successfully Deleted."), HttpStatus.CREATED);
         } catch (Exception e) {
             return getErrorResponseEntity(e);
         }
     }
+
+//////////////////////////////////////rate plan/////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/rate-plan")
+    @ResponseBody
+    public ResponseEntity insertRatePlan(@RequestParam(name = "ratePlan") RatePlan ratePlan) {
+        try {
+            IgniteCache<RatePlanPK, RatePlan> ratePlanIgniteCache = igniteClientNode.getRatePlanIgniteCache();
+            ratePlanIgniteCache.put(ratePlan.getRatePlanPK(), ratePlan);
+            return new ResponseEntity(new StringBuilder("Successfully created"), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @GetMapping("/rate-plan/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity getRatePlanById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
+                                      @RequestParam(name = "roomId") Integer roomId,
+                                      @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePlanPK, RatePlan> ratePlanIgniteCache = igniteClientNode.getRatePlanIgniteCache();
+            RatePlanPK ratePlanPK = new RatePlanPK();
+            ratePlanPK.setRoom_id(roomId);
+            ratePlanPK.setRate_plan_id(ratePlanId);
+            ratePlanPK.setTenant_id(tenantId);
+            RatePlan ratePlan = ratePlanIgniteCache.get(ratePlanPK);
+            if (ratePlan != null) {
+                return new ResponseEntity(ratePlan, HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/rate-plan/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity deleteRatePlanById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
+                                             @RequestParam(name = "roomId") Integer roomId,
+                                             @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePlanPK, RatePlan> ratePlanIgniteCache = igniteClientNode.getRatePlanIgniteCache();
+            RatePlanPK ratePlanPK = new RatePlanPK();
+            ratePlanPK.setRoom_id(roomId);
+            ratePlanPK.setRate_plan_id(ratePlanId);
+            ratePlanPK.setTenant_id(tenantId);
+            ratePlanIgniteCache.remove(ratePlanPK);
+            return new ResponseEntity(new StringBuilder("Rate Plan Successfully Deleted."), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+//////////////////////////////////////rateplan allocation/////////////////////////////////////////////////////////////////////
+
+    @PostMapping("/rate-plan-allocations")
+    @ResponseBody
+    public ResponseEntity insertRatePlanallocations(@RequestParam(name = "ratePlanAllocation") RatePlanAllocation ratePlanAllocation) {
+        try {
+            IgniteCache<RatePlanAllocationPK, RatePlanAllocation> ratePlanAllocationIgniteCache = igniteClientNode.getRatePlanAllocationIgniteCache();
+            ratePlanAllocationIgniteCache.put(ratePlanAllocation.getRatePlanAllocationPK(), ratePlanAllocation);
+            return new ResponseEntity(new StringBuilder("Successfully created"), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @GetMapping("/rate-plan-allocations/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity getRatePlanallocationsById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
+                                      @RequestParam(name = "stay_date") LocalDate stayDate,
+                                      @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePlanAllocationPK, RatePlanAllocation> ratePlanAllocationIgniteCache = igniteClientNode.getRatePlanAllocationIgniteCache();
+            RatePlanAllocationPK ratePlanAllocationPK = new RatePlanAllocationPK();
+            ratePlanAllocationPK.setStay_date(stayDate);
+            ratePlanAllocationPK.setRate_plan_id(ratePlanId);
+            ratePlanAllocationPK.setTenant_id(tenantId);
+            RatePlanAllocation planAllocation = ratePlanAllocationIgniteCache.get(ratePlanAllocationPK);
+            if (planAllocation != null) {
+                return new ResponseEntity(planAllocation, HttpStatus.FOUND);
+            } else {
+                return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
+    @DeleteMapping("/rate-plan-allocations/{ratePlanId}")
+    @ResponseBody
+    public ResponseEntity deleteRatePlaallocationsnById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
+                                                        @RequestParam(name = "stay_date") LocalDate stayDate,
+                                                        @RequestParam(name = "tenantId") String tenantId) {
+        try {
+            IgniteCache<RatePlanAllocationPK, RatePlanAllocation> ratePlanAllocationIgniteCache = igniteClientNode.getRatePlanAllocationIgniteCache();
+            RatePlanAllocationPK ratePlanAllocationPK = new RatePlanAllocationPK();
+            ratePlanAllocationPK.setStay_date(stayDate);
+            ratePlanAllocationPK.setRate_plan_id(ratePlanId);
+            ratePlanAllocationPK.setTenant_id(tenantId);
+            ratePlanAllocationIgniteCache.get(ratePlanAllocationPK);
+            return new ResponseEntity(new StringBuilder("Rate Plan Allocation Successfully Deleted."), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return getErrorResponseEntity(e);
+        }
+    }
+
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @NotNull

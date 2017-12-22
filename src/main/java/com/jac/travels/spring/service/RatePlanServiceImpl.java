@@ -23,10 +23,15 @@ public class RatePlanServiceImpl implements RatePlanService {
     }
 
     @Override
-    public List<RatePlan> getRatePlaneByRoomId(int roomId) {
-        Select select = QueryBuilder.select().from("rate_plan");
-        select.where(QueryBuilder.eq("room_id", roomId));
-        List<RatePlan> ratePlans=cassandraTemplate.select(select, RatePlan.class);
-        return ratePlans;
+    public void save(RatePlan ratePlan) {
+        repository.save(ratePlan);
     }
+
+//    @Override
+//    public List<RatePlan> getRatePlaneByRoomId(int roomId) {
+//        Select select = QueryBuilder.select().from("rate_plan");
+//        select.where(QueryBuilder.eq("room_id", roomId));
+//        List<RatePlan> ratePlans=cassandraTemplate.select(select, RatePlan.class);
+//        return ratePlans;
+//    }
 }
