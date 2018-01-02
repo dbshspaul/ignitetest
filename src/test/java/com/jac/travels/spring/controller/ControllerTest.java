@@ -1,7 +1,7 @@
 package com.jac.travels.spring.controller;
 
 import com.googlecode.protobuf.format.JsonFormat;
-import com.jac.travels.protobuf.Property;
+import com.jac.travels.protobuf.Response;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -11,9 +11,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-
-import static org.junit.Assert.*;
 
 /**
  * created by My System on 14-Dec-17
@@ -42,8 +39,8 @@ public class ControllerTest {
 
     private String convertProtobufMessageStreamToJsonString(InputStream protobufStream) throws IOException {
         JsonFormat jsonFormat = new JsonFormat();
-        Property.PropertyRequestProto propertyRequestProto = Property.PropertyRequestProto.parseFrom(protobufStream);
-        return jsonFormat.printToString(propertyRequestProto);
+        Response.PropertyResponseProto propertyResponseProto = Response.PropertyResponseProto.parseFrom(protobufStream);
+        return jsonFormat.printToString(propertyResponseProto);
     }
 
     @Test
@@ -65,7 +62,7 @@ public class ControllerTest {
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpDelete request = new HttpDelete("http://localhost:8080/contract/2?tenant_id=AC40&property_id=5");
             HttpResponse httpResponse = httpClient.execute(request);
-            InputStream responseStream= httpResponse.getEntity().getContent();
+            InputStream responseStream = httpResponse.getEntity().getContent();
             byte[] buff = new byte[responseStream.available()];
             responseStream.read(buff);
             System.out.println(new String(buff));

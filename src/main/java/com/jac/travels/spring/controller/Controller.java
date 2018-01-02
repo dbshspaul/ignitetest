@@ -38,7 +38,7 @@ public class Controller {
         Property property = propertyCache.get(propertyPK);
         ResponseEntity entity = null;
         if (property != null) {
-            com.jac.travels.protobuf.Property.PropertyRequestProto property1 = com.jac.travels.protobuf.Property.PropertyRequestProto.newBuilder()
+            com.jac.travels.protobuf.Response.PropertyResponseProto property1 = com.jac.travels.protobuf.Response.PropertyResponseProto.newBuilder()
                     .setPropertyId(property.getPropertyPK().getProperty_id())
                     .setCutOffTime(property.getCutoff_time())
                     .setStarRating(property.getStar_rating().floatValue())
@@ -112,7 +112,7 @@ public class Controller {
         Contract contract = contractCache.get(contractPK);
         ResponseEntity entity = null;
         if (contract != null) {
-            com.jac.travels.protobuf.Contract.ContractRequestProto contractRequestProto = com.jac.travels.protobuf.Contract.ContractRequestProto.newBuilder()
+            com.jac.travels.protobuf.Response.ContractResponseProto contractRequestProto = com.jac.travels.protobuf.Response.ContractResponseProto.newBuilder()
                     .setContractId(contract.getContractPK().getContract_id())
                     .setPropertyId(contract.getContractPK().getProperty_id())
                     .setBookingFrom(contract.getBooking_from().toString())
@@ -270,8 +270,8 @@ public class Controller {
     @GetMapping("/rate-plan/{ratePlanId}")
     @ResponseBody
     public ResponseEntity getRatePlanById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
-                                      @RequestParam(name = "roomId") Integer roomId,
-                                      @RequestParam(name = "tenantId") String tenantId) {
+                                          @RequestParam(name = "roomId") Integer roomId,
+                                          @RequestParam(name = "tenantId") String tenantId) {
         try {
             IgniteCache<RatePlanPK, RatePlan> ratePlanIgniteCache = igniteClientNode.getRatePlanIgniteCache();
             RatePlanPK ratePlanPK = new RatePlanPK();
@@ -326,8 +326,8 @@ public class Controller {
     @GetMapping("/rate-plan-allocations/{ratePlanId}")
     @ResponseBody
     public ResponseEntity getRatePlanallocationsById(@PathVariable(name = "ratePlanId") Integer ratePlanId,
-                                      @RequestParam(name = "stay_date") LocalDate stayDate,
-                                      @RequestParam(name = "tenantId") String tenantId) {
+                                                     @RequestParam(name = "stay_date") LocalDate stayDate,
+                                                     @RequestParam(name = "tenantId") String tenantId) {
         try {
             IgniteCache<RatePlanAllocationPK, RatePlanAllocation> ratePlanAllocationIgniteCache = igniteClientNode.getRatePlanAllocationIgniteCache();
             RatePlanAllocationPK ratePlanAllocationPK = new RatePlanAllocationPK();

@@ -3,7 +3,6 @@ package com.jac.travels.ignite.cache.store;
 import com.jac.travels.idclass.RatePlanPK;
 import com.jac.travels.kafka.ProducerUtil;
 import com.jac.travels.model.RatePlan;
-import com.jac.travels.spring.controller.BeanExporter;
 import com.jac.travels.utility.QueryBuilder;
 import org.apache.ignite.cache.store.CacheStoreAdapter;
 import org.slf4j.Logger;
