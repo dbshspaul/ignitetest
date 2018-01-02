@@ -45,7 +45,6 @@ public class RatePlan {
     private Boolean has_inventory_defined;
     private Boolean has_split_inventory_defined;
     private Integer include_days;
-    private Boolean no_end_String;
     private Map<Integer, Byte> rate_code_ids;
     private Integer rate_grid_type_id;
     private String rate_plan_name;
@@ -319,14 +318,6 @@ public class RatePlan {
         this.include_days = include_days;
     }
 
-    public Boolean getNo_end_String() {
-        return no_end_String;
-    }
-
-    public void setNo_end_String(Boolean no_end_String) {
-        this.no_end_String = no_end_String;
-    }
-
     public Map<Integer, Byte> getRate_code_ids() {
         return rate_code_ids;
     }
@@ -482,7 +473,6 @@ public class RatePlan {
                 ", has_inventory_defined=" + has_inventory_defined +
                 ", has_split_inventory_defined=" + has_split_inventory_defined +
                 ", include_days=" + include_days +
-                ", no_end_String=" + no_end_String +
                 ", rate_code_ids=" + rate_code_ids +
                 ", rate_grid_type_id=" + rate_grid_type_id +
                 ", rate_plan_name='" + rate_plan_name + '\'' +

@@ -173,7 +173,9 @@ public class Controller {
             ratePK.setTenant_id(tenantId);
             Rate rate = rateIgniteCache.get(ratePK);
             if (rate != null) {
-                return new ResponseEntity(rate, HttpStatus.FOUND);
+                com.jac.travels.protobuf.Response.RateResponseProto rateResponseProto = com.jac.travels.protobuf.Response.RateResponseProto.newBuilder()
+                        .build();
+                return new ResponseEntity(rateResponseProto, HttpStatus.FOUND);
             } else {
                 return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
             }
@@ -278,7 +280,9 @@ public class Controller {
             ratePlanPK.setTenant_id(tenantId);
             RatePlan ratePlan = ratePlanIgniteCache.get(ratePlanPK);
             if (ratePlan != null) {
-                return new ResponseEntity(ratePlan, HttpStatus.FOUND);
+                com.jac.travels.protobuf.Response.RatePlanResponseProto ratePlanResponseProto = com.jac.travels.protobuf.Response.RatePlanResponseProto.newBuilder()
+                        .build();
+                return new ResponseEntity(ratePlanResponseProto, HttpStatus.FOUND);
             } else {
                 return new ResponseEntity(new StringBuilder("No data found"), HttpStatus.NOT_FOUND);
             }

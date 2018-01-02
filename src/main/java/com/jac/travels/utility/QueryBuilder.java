@@ -14,10 +14,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class QueryBuilder {
@@ -248,6 +245,12 @@ public class QueryBuilder {
                     .replaceFirst(field.getName().substring(0, 1), field.getName()
                             .substring(0, 1).toUpperCase()));
             value += method.invoke(o) + ", ";
+        } else if (field.getType().equals(Set.class)) {
+            Method method = c.getMethod("get" + field.getName()
+                    .replaceFirst(field.getName().substring(0, 1), field.getName()
+                            .substring(0, 1).toUpperCase()));
+            value += method.invoke(o) == null ? null + ", " : method.invoke(o).toString().replace('[', '{')
+                    .replace(']', '}') + ", ";
         } else {
             Method method = c.getMethod("get" + field.getName()
                     .replaceFirst(field.getName().substring(0, 1), field.getName()
@@ -354,7 +357,7 @@ public class QueryBuilder {
     public String getTableName(Class entityClass) {
         String name = entityClass.getSimpleName();
         Annotation annotation = entityClass.getAnnotation(Table.class);
-        if (annotation!=null) {
+        if (annotation != null) {
             Table table = (Table) annotation;
             name = table.value();
         }
